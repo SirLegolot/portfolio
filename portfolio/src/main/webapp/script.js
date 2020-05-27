@@ -33,19 +33,18 @@ function addRandomGreeting() {
 
 // Button script
 $(window).scroll(function() {
-    var height = $(window).scrollTop();
-    if (height > 100) {
-        $('#button').fadeIn();
-    } else {
-        $('#button').fadeOut();
-    }
+  // check if scrolled more than 100 pixels
+  if ($(window).scrollTop() > 100) {
+    $('#button').fadeIn();
+  } else {
+    $('#button').fadeOut();
+  }
 });
-$(document).ready(function() {
-    $("#button").click(function(event) {
-        event.preventDefault();
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        return false;
-    });
 
+$(document).ready(function() {
+  $("#button").click(function(event) {
+    event.preventDefault();
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  });
 });
 
