@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Blog - Neel Gandhi</title>
+  <link rel="stylesheet" href="/../style.css">
+  <link rel=icon href=/../images/favicon.ico>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:
+              wght@300&display=swap" rel="stylesheet">
+  <script src="/../script.js"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="/../index.html">Home</a></li>
+      <li><a href="/../projects.html">Projects</a></li>
+      <li><a href="/../blog.html"><u>Blog</u></a></li>
+      <li><a href="/../photos.html">Photography</a></li>
+      <li style="float:right">
+        <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
+           target="_blank">
+          LinkedIn
+        </a>
+      </li>
+      <li style="float:right">
+        <a href="https://github.com/SirLegolot" target="_blank">GitHub</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Blog content -->
+  <div id="content">
+    <p>
+      Welcome to my second post! In this blog, I present a javascript snake 
+      game that I made, with inspiration from the tutorial 
+      <a href="https://www.youtube.com/watch?v=21eSpMtJwrc" target="_blank">
+        here.
+      </a>
+      I modified the tutorial to have classes instead of functions to get a 
+      better feel for object oriented programming in javascript. I also added 
+      a welcome and end screen. Feel free to play below!
+    </p>
+    <p><i>5/26/2020</i></p>
+    <canvas
+      class="canvas"
+      height="400"
+      width="600"
+      style="background-color: #3e3e3e">
+    </canvas>
+    <h1 class="score"></h1>
+  </div>
+
+  
+  <script src="snake_scripts/fruit.js"></script>
+  <script src="snake_scripts/snake.js"></script>
+  <script src="snake_scripts/draw.js"></script>
+
+</body>
+
+</html>

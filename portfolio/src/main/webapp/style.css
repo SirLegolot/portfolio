@@ -7,3 +7,87 @@
 #greeting-container {
   margin-top: 20px;
 }
+
+/* Main font for the website */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #ececec;
+  margin: 0;
+  padding: 0px;
+  margin-top: 70px;
+}
+
+/* Navigation pane styling: */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+/* Card styling */
+.card {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  color: rgba(0,0,0,.87);
+  margin: 8px;
+  min-width: 250px;
+  overflow: hidden;
+  position: relative;
+}
+
+.card::after {
+  clear: both;
+}
+
+.card::after, .card::before {
+  content: "";
+  display: block;
+}
+
+.card .card-header {
+  min-height: 20px;
+  padding: 16px;
+  position: relative;
+  font-size: larger;
+}
+
+.card .card-text {
+  padding: 16px;
+  min-height: 20px;
+  position: relative;
+}
+
+/* Centering for images */
+.card .center {
+  display: block;
+  width: 100%
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,18 +1,55 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
-    </div>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Neel Gandhi</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel=icon href=/images/favicon.ico>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:
+              wght@300&display=swap" rel="stylesheet">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="index.html"><u>Home</u></a></li>
+      <li><a href="projects.html">Portfolio</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="photos.html">Photography</a></li>
+      <li style="float:right">
+        <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
+           target="_blank">
+          LinkedIn
+        </a>
+      </li>
+      <li style="float:right">
+        <a href="https://github.com/SirLegolot" target="_blank">GitHub</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Brief Summary About Myself -->
+  <div id="content">
+    <h1>Neel Gandhi</h1>
+    <img class="center" 
+         src="/images/neel_photo.JPG" 
+         alt="Profile Photo"
+         width="300"
+         height="300"
+         style="border-radius: 50%;">
+    <p>
+      Hi! My name is Neel Gandhi and I'm a rising junior at Carnegie Mellon
+      University. I study Electrical and Computer Engineering, and I have
+      interests in a wide variety of things, including computer systems,
+      computer vision, parallel computing, and brain computer interfacing. 
+    </p>
+    <p>Click here to get a random fact about myself:</p>
+    <button onclick="addRandomGreeting()">I'm Feeling Curious</button>
+    <div id="greeting-container"></div>
+  </div>
+</body>
+
 </html>
