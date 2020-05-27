@@ -8,6 +8,7 @@
   <link rel=icon href=/images/favicon.ico>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:
               wght@300&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="script.js"></script>
 </head>
 
@@ -17,7 +18,7 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="projects.html">Projects</a></li>
-      <li><a href="blog.html"><u>Blog</u></a></li>
+      <li><a href="blog.html" class="cur">Blog</a></li>
       <li><a href="photos.html">Photography</a></li>
       <li style="float:right">
         <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
@@ -31,6 +32,9 @@
     </ul>
   </nav>
 
+  <!-- Back to top button -->
+  <a id="button" href="#">&#11165;</a>
+
   <!-- Blog cards -->
   <div id="content">
     <h2>Click cards to read blogs</h2>
@@ -38,7 +42,7 @@
     <a href="/blogs/snake.html" style="text-decoration: none;">
       <div class="card">
         <div class="card-header">Javascript Snake</div>
-        <!-- <img class="center" src="/images/snake.jpg" alt="snake" width="600"> -->
+        <img class="center" src="/images/snake.png" alt="snake" width="600">
         <div class="card-text">
           Here's a cool snake game script I wrote while learning javascript.
         </div>

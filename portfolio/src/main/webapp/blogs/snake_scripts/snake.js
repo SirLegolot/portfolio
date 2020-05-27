@@ -8,6 +8,7 @@ class Snake {
     this.tail = [];
   }
   
+  // Game over -> restart snake position and length
   reset () {
     this.x = 0;
     this.y = 0;
@@ -17,6 +18,7 @@ class Snake {
     this.tail = [];
   }
   
+  // Draws a white rectangle with grey borders
   draw () {
     
     ctx.fillStyle = "#FFFFFF";
@@ -32,6 +34,8 @@ class Snake {
     ctx.strokeRect(this.x, this.y, scale, scale);
   }
   
+  // Snake movement: Shifts array to the left by one, and updates the last 
+  // position. Then moves the head.
   update () {
     for (let i=0; i<this.tail.length-1; i++) {
       this.tail[i] = this.tail[i+1];
@@ -82,6 +86,7 @@ class Snake {
     return false;
   } 
   
+  // Check if colliding with the wall or colliding with the tail
   checkCollision () {
     if (this.x > canvas.width || this.y > canvas.height ||
         this.x < 0 || this.y < 0) {

@@ -4,6 +4,7 @@ class Fruit {
     this.y;
   }
   
+  // Randomly pick a new location on the board, check if it is a valid position
   pickNew (snake) {
     this.x = (Math.floor(Math.random() * columns - 1) + 1) * scale;
     this.y = (Math.floor(Math.random() * rows - 1) + 1) * scale;
@@ -18,6 +19,7 @@ class Fruit {
     return true;
   }
 
+  // Continuously picks a new location until a valid pos is found for the fruit
   pickLocation(snake) {
     while (!this.pickNew(snake)) continue;
   }
