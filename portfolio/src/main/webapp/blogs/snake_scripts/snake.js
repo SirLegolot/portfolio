@@ -44,7 +44,8 @@ class Snake {
     this.y += this.ySpeed;
   }
   
-  changeDirection (direction) {
+  changeDirection () {
+    let direction = moves.shift();
     switch(direction) {
       case 'Up':
         if (this.total > 0 && this.ySpeed > 0) break;
@@ -65,6 +66,8 @@ class Snake {
         if (this.total > 0 && this.xSpeed < 0) break;
         this.xSpeed = scale;
         this.ySpeed = 0;
+        break;
+      default:
         break;
     }
   }

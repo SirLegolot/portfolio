@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const scale = 20;
 const rows = canvas.height / scale;
 const columns = canvas.width / scale;
+const moves = [];
 var snake;
 var fruit;
 
@@ -15,6 +16,7 @@ var fruit;
   window.setInterval(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     fruit.draw();
+    snake.changeDirection();
     snake.update();
     snake.draw();
 
@@ -31,5 +33,5 @@ var fruit;
 
 window.addEventListener('keydown', ((evt) => {
   const direction = evt.key.replace('Arrow', '');
-  snake.changeDirection(direction);
+  moves.push(direction);
 }));
