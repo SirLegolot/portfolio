@@ -25,7 +25,7 @@ class Fruit {
   }
   
   draw() {
-    ctx.fillStyle = "#4cafab";
+    ctx.fillStyle = "#FF9800";
     ctx.fillRect(this.x, this.y, scale, scale)
   }
 }

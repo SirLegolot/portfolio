@@ -1,7 +1,7 @@
 class Snake {
   constructor () {
-    this.x = 0;
-    this.y = 0;
+    this.x = scale;
+    this.y = scale;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.total = 0;
@@ -10,8 +10,12 @@ class Snake {
   
   // Game over -> restart snake position and length
   reset () {
-    this.x = 0;
-    this.y = 0;
+    ctx.fillStyle = "#ff0000";
+    ctx.strokeStyle = "#3e3e3e";
+    ctx.fillRect(this.x, this.y, scale, scale);
+    ctx.strokeRect(this.x, this.y, scale, scale);
+    this.x = scale;
+    this.y = scale;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.total = 0;
