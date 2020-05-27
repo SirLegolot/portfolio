@@ -41,8 +41,21 @@
       </a>
       I modified the tutorial to have classes instead of functions to get a 
       better feel for object oriented programming in javascript. I also added 
-      a welcome and end screen. Feel free to play below!
+      a welcome and end screen. 
     </p>
+    <p>
+      Here's an intersesting bug that I found in the tutorial: When pressing 
+      mutliple keys at the same time within the same animation interval (in 
+      this case 1/10 of a second), the snake bugs out and thinks it hits when
+      making a tight turn. For example, if we send two commands such 
+      as up and left, and the snake is currently moving right, because they 
+      occur in the same time interval, the snake never physically moves up. Both
+      updates happen right after each other, but only the left turn is actually
+      animated. Thus the snake hits itself and the game prematurely ends. I 
+      fixed it by adding a simple queue of direction updates so we can ensure
+      each change in direction gets animated. 
+    </p>
+    <p>Feel free to play below!</p>
     <p><i>5/26/2020</i></p>
     <canvas
       class="canvas"

@@ -32,6 +32,9 @@ var fruit;
 }());
 
 window.addEventListener('keydown', ((evt) => {
+  if ([37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
+    evt.preventDefault();
+  }
   const direction = evt.key.replace('Arrow', '');
   moves.push(direction);
 }));
