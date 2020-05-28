@@ -142,3 +142,8 @@ div.gallery img {
   width: 100%;
   height: auto;
 }
+
+/* Prevent overlapping divs */
+.clear {
+  clear: both;
+}
