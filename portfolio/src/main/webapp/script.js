@@ -49,3 +49,12 @@ $(document).ready(function() {
   });
 });
 
+// Test here
+function navButton() {
+  var x = document.getElementById("mynavbar");
+  if (x.className === "navbar") {
+    x.className += " responsive";
+  } else {
+    x.className = "navbar";
+  }
+}
