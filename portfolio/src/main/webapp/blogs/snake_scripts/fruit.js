@@ -5,7 +5,7 @@ class Fruit {
   }
   
   // Randomly pick a new location on the board, check if it is a valid position
-  pickNew (snake) {
+  pickNew(snake) {
     this.x = (Math.floor(Math.random() * columns - 1) + 1) * scale;
     this.y = (Math.floor(Math.random() * rows - 1) + 1) * scale;
     for (let i=0; i<snake.tail.length; i++) {
