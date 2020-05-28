@@ -19,7 +19,7 @@
   position: fixed;
   bottom: 50px;
   right: 50px;
-  background-color: #FF9800;
+  background-color: #ff9800;
   color: white;
   text-align: center;
   font-size: 30px;
@@ -70,7 +70,7 @@ li a:hover {
 
 /* Active status for current page */
 .cur {
-  background-color: #FF9800
+  background-color: #ff9800
 }
 
 /* Card styling */

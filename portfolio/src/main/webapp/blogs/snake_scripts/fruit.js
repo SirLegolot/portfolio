@@ -24,6 +24,7 @@ class Fruit {
     while (!this.pickNew(snake)) continue;
   }
   
+  // Draw orange rectangle
   draw() {
     ctx.fillStyle = "#FF9800";
     ctx.fillRect(this.x, this.y, scale, scale)

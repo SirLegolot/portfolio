@@ -41,9 +41,10 @@ $(window).scroll(function() {
   }
 });
 
+// When clicked, brings back to top
 $(document).ready(function() {
   $("#button").click(function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Stop default action when clicking a button
     $("html, body").animate({ scrollTop: 0 }, "slow");
   });
 });

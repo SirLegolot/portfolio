@@ -5,13 +5,11 @@ const scale = 20;
 const rows = canvas.height / scale;
 const columns = canvas.width / scale;
 const moves = [];
-var snake;
-var fruit;
 
-// Setup function automatically runs
-(function setup() {
-  snake = new Snake();
-  fruit = new Fruit();
+// Setup function creates snake and fruit objects, and updates frames
+function setup() {
+  const snake = new Snake();
+  const fruit = new Fruit();
   fruit.pickLocation(snake);
 
   // Update the board every 1/10 of a second based on player inputs
@@ -22,17 +20,21 @@ var fruit;
     snake.update();
     snake.draw();
 
+    // Check for eating fruit or collisions with wall/tail
     if (snake.eat(fruit)) {
       fruit.pickLocation(snake);
     }
+    snake.checkCollision();
 
     // Score board
-    snake.checkCollision();
     document.querySelector('.score')
       .innerText = "Score: " + snake.total;
 
   }, 100);
-}());
+}
+
+// Run the setup function
+setup ();
 
 // Listens for arrow key presses and disables page scrolling in the browser
 window.addEventListener('keydown', ((evt) => {
@@ -42,3 +44,4 @@ window.addEventListener('keydown', ((evt) => {
   const direction = evt.key.replace('Arrow', '');
   moves.push(direction);
 }));
+

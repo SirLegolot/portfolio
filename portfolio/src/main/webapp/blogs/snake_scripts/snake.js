@@ -28,10 +28,8 @@ class Snake {
     ctx.fillStyle = "#FFFFFF";
     ctx.strokeStyle = "#3e3e3e";
     for (let i=0; i<this.tail.length; i++) {
-      ctx.fillRect(this.tail[i].x,
-        this.tail[i].y, scale, scale);
-      ctx.strokeRect(this.tail[i].x,
-        this.tail[i].y, scale, scale);
+      ctx.fillRect(this.tail[i].x, this.tail[i].y, scale, scale);
+      ctx.strokeRect(this.tail[i].x, this.tail[i].y, scale, scale);
     }
 
     ctx.fillRect(this.x, this.y, scale, scale);
@@ -52,6 +50,8 @@ class Snake {
     this.y += this.ySpeed;
   }
   
+  // Changes direction based on inputs. Prevents movement in the opposite 
+  // direction (ex: cannot turn right when moving left)
   changeDirection () {
     let direction = moves.shift();
     switch(direction) {
@@ -80,13 +80,12 @@ class Snake {
     }
   }
   
+  // Check if collided with fruit
   eat (fruit) {
-    if (this.x === fruit.x &&
-      this.y === fruit.y) {
+    if (this.x === fruit.x && this.y === fruit.y) {
       this.total++;
       return true;
     }
-
     return false;
   } 
   
