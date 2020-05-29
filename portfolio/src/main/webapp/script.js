@@ -15,7 +15,7 @@
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
+function addRandomFact() {
   const greetings =
       ['My favorite color is red!', 
        'I used to tap dance!', 
@@ -49,7 +49,7 @@ $(document).ready(function() {
   });
 });
 
-// Test here
+// Navigation button - expand/contract
 function navButton() {
   var x = document.getElementById("mynavbar");
   if (x.className === "navbar") {
@@ -57,4 +57,11 @@ function navButton() {
   } else {
     x.className = "navbar";
   }
+}
+
+// Fetch test
+async function addGreeting() {
+  const response = await fetch('/data');
+  const greeting = await response.text();
+  document.getElementById('greeting-container').innerHTML = greeting;
 }
