@@ -4,7 +4,7 @@ class Snake {
     this.y = scale;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.total = 0;
+    this.total = 0; // length of the tail/number of fruits eaten
     this.tail = [];
   }
 
@@ -50,7 +50,9 @@ class Snake {
   }
 
   // Changes direction based on inputs. Prevents movement in the opposite 
-  // direction (ex: cannot turn right when moving left)
+  // direction (ex: cannot turn right when moving left), except for when the 
+  // length of the tail is 0. In that case, since the snake is simply one box,
+  // It can go in all directions.
   changeDirection() {
     let direction = moves.shift();
     switch (direction) {
