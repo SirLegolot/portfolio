@@ -17,7 +17,11 @@
  */
 function addRandomGreeting() {
   const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+      ['My favorite color is red!', 
+       'I used to tap dance!', 
+       'I still love building with Legos!', 
+       'My favorite movie is Intersellar!',
+       'In my free time, I love to play table tennis!'];
 
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -25,4 +29,32 @@ function addRandomGreeting() {
   // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
+}
+
+// Button script
+$(window).scroll(function() {
+  // check if scrolled more than 100 pixels
+  if ($(window).scrollTop() > 100) {
+    $('#button').fadeIn();
+  } else {
+    $('#button').fadeOut();
+  }
+});
+
+// When clicked, brings back to top
+$(document).ready(function() {
+  $("#button").click(function(event) {
+    event.preventDefault(); // Stop default action when clicking a button
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  });
+});
+
+// Test here
+function navButton() {
+  var x = document.getElementById("mynavbar");
+  if (x.className === "navbar") {
+    x.className += " responsive";
+  } else {
+    x.className = "navbar";
+  }
 }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Blog - Neel Gandhi</title>
+  <link rel="stylesheet" href="/../style.css">
+  <link rel=icon href=/../images/favicon.ico>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:
+              wght@300&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/../script.js"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <div class="navbar" id="mynavbar">
+    <a href="/../index.html">Home</a>
+    <a href="/../projects.html">Portfolio</a>
+    <a href="/../blog.html" class="cur">Blog</a>
+    <a href="/../photos.html">Photography</a>
+    <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
+       target="_blank" style="float:right">
+      LinkedIn
+    </a>
+    <a href="https://github.com/SirLegolot" target="_blank" 
+       style="float:right">
+      GitHub
+    </a>
+    <a class="icon" onclick="navButton()">...</a>
+  </div>
+
+  <!-- Back to top button -->
+  <a id="button" href="#">&#11165;</a>
+
+  <!-- Blog content -->
+  <div id="content">
+    <p>
+      Welcome to my second post! In this blog, I present a javascript snake 
+      game that I made, with inspiration from the tutorial 
+      <a href="https://www.youtube.com/watch?v=21eSpMtJwrc" target="_blank">
+        here.
+      </a>
+      I modified the tutorial to have classes instead of functions to get a 
+      better feel for object oriented programming in javascript. 
+    </p>
+    <p>
+      Here's an intersesting bug that I found in the tutorial: When pressing 
+      mutliple keys at the same time within the same animation interval (in 
+      this case 1/10 of a second), the snake bugs out and hits itself when
+      making a tight turn. For example, if we send two commands such 
+      as up and left, and the snake is currently moving right, because they 
+      occur in the same time interval, the snake never physically moves up. Both
+      updates happen right after each other, but only the left turn is actually
+      animated. Thus the snake hits itself and the game prematurely ends. 
+      There is a simple fix: Create a queue of direction updates so we can 
+      ensure each change in direction gets animated one by one.
+    </p>
+    <p>Feel free to play below (use the arrow keys to move)!</p>
+    <p><i>5/26/2020</i></p>
+    <canvas
+      class="canvas"
+      height="400"
+      width="600"
+      style="background-color: #3e3e3e">
+    </canvas>
+    <h1 class="score"></h1>
+  </div>
+
+  
+  <script src="snake_scripts/fruit.js"></script>
+  <script src="snake_scripts/snake.js"></script>
+  <script src="snake_scripts/draw.js"></script>
+
+</body>
+
+</html>

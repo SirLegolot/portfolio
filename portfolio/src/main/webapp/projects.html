@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Portfolio - Neel Gandhi</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel=icon href=/images/favicon.ico> 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:
+              wght@300&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="script.js"></script>
+  
+</head>
+
+<body>
+	<!-- Navigation Bar -->
+	<div class="navbar" id="mynavbar">
+    <a href="index.html">Home</a>
+    <a href="projects.html" class="cur">Portfolio</a>
+    <a href="blog.html">Blog</a>
+    <a href="photos.html">Photography</a>
+    <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
+       target="_blank" style="float:right">
+      LinkedIn
+    </a>
+    <a href="https://github.com/SirLegolot" target="_blank" 
+       style="float:right">
+      GitHub
+    </a>
+    <a class="icon" onclick="navButton()">...</a>
+  </div>
+
+  <!-- Back to top button -->
+  <a id="button" href="#">&#11165;</a>
+
+	<!-- Project List with Images -->
+	<div id="content">
+		<h1>Projects</h1>
+
+		<div class="card">
+			<div class="card-header">Brain Computer Interfacing</div>
+			<img src="/images/bci.png" alt="bci" width="600" class="center">
+			<div class="card-text">
+				I pursue undergraduate research at the Biomedical Functional Imaging and
+				Neuroengineering Laboratory
+				<a href="https://www.cmu.edu/bme/helab/" target="_blank">
+					(BFINL)
+				</a>
+				at Carnegie Mellon University. I work on a team that deals with
+				brain computer interfaces (BCIs), specifically using EEG data to detect
+				and utilize motor-related brain signals to move robotic arms. My main
+				project at the lab is developing a custom MATLAB software package to
+				stream and process EEG data taken from EEG hardware (amplifiers, caps) to
+				perform BCI tasks.
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Hide.me</div>
+			<img class="center" src="/images/hideme.png" alt="hideme" width="600">
+			<div class="card-text">
+				For my final project for an introductory CS course
+				<a href="https://www.cs.cmu.edu/~112/" target="_blank">(15-112)</a>,
+				I created a messaging application that allows users to
+				secretly encode information such as texts and images within other images
+				without visibly altering the host image, using a process called
+				steganography. Created with python sockets and image processing libraries,
+				Hide.me allows a user to send an image that as secret information
+				encoded within and encrypt it with a password. On the other end,
+				the recepient can enter a password to decrypt and extract the secret
+				contents within the image. Here's a link to the
+				<a href="https://github.com/SirLegolot/hide.me" target="_blank">
+					GitHub repo.
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Tartan AUV</div>
+			<img class="center" src="/images/sub.png" alt="sub" width="600">
+			<div class="card-text">
+				I'm part of the Tartan Autonomous Underwater Vehicle
+				<a href="https://tartanauv.com/team/" target="_blank">(TAUV)</a>
+				team at the robotics club at CMU. We particpate in the annual RoboSub
+				competition, where teams build autonmous submarines that perform a
+				variety of tasks such as passing through gates, hitting target buoys, and
+				dropping markers. I've worked on a couple of parts of the sub, including
+				being the testing lead to get the sub ready electronically for testing
+				(building/soldering) and collecting training data for our
+				deep learning object detection model to detect buoys and gates. This past
+				year I also worked on software for trajectory/path planning as well as
+				mission planning with python and Robot Operating System
+				<a href="https://www.ros.org/" target="_blank">(ROS).</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">We Have A Car (WHAC)</div>
+			<img class="center" src="/images/whac.jpg" alt="whac" width="600">
+			<div class="card-text">
+				For the Build18 competition at CMU, I was part of a team of 5 that built
+				a mini autonomous car that used simultaneous localization and mapping
+				<a href="https://en.wikipedia.org/wiki/Simultaneous_localization_
+                and_mapping" target="_blank">
+					(SLAM)
+				</a>
+				to map and travel through unknown environements. The car was
+				built with standard VEX robotics parts, and it used a Zed mini stereo
+				camera, Rplidar 360 degree lidar, and a Jetson Xavier for compute power.
+				I primarily worked on construction of the vehicle and lidar, working with
+				Hector SLAM, a ROS package that performs SLAM with lidar. Here's a 
+        link to the 
+        <a href="https://www.build18.org/garage/project/548/" target="_blank">
+          project.
+        </a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">
+				CMU Postal Services, But Better (Post-Malautomated)
+			</div>
+			<img class="center" src="/images/cmupsbb.png" alt="cmupsbb" width="600">
+			<div class="card-text">
+				Also for Build18, I worked on a system to improve the package sorting and
+				delivery process here at CMU. It uses a combination of computer vision
+				with OpenCV, SQL, and LED indicators so that emplyees can scan a barcode,
+				have it automatically entered in database, and light up an LED to the
+				given postal bin to put in. When students come to pick up a package, they
+				add themselves to a queue, and the bins will light up so the emplyee can
+				go and pick it up for them. Here's a link to the
+				<a href="https://github.com/SirLegolot/CMUPSbb" target="_blank">
+					GitHub repo
+				</a> 
+        and 
+        <a href="https://www.build18.org/garage/project/431/" target="_blank">
+          project.
+        </a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">LegoLight</div>
+			<img class="center" src="/images/legolight_logo.png" alt="legolight_logo"
+           width="300">
+			<img class="center" src="/images/legolight.jpg" alt="legolight"
+           width="300">
+			<div class="card-text">
+				Legolight is a cheap, easy-to-build, and mass-produceable
+				lantern that aims to solve the need of cheap and efficient lighting in
+				low income areas and refugee camps. It consists of a set of simple
+				lasercut acrylic pieces and minimal electronics (LEDS and circuitboard)
+				that can easily snap together. It can be constructed within 5 minutes and
+				when mass produced can cost around $2 in parts. It functions as both a
+				flashlight and as a lantern with a sliding mechanism.
+			</div>
+		</div>
+
+		<h1>Hackathons</h1>
+
+		<div class="card">
+			<div class="card-header">Lab.me</div>
+			<img class="center" src="/images/labme_logo.png" alt="labme_logo"
+           width="300">
+			<img class="center" src="/images/labme.png" alt="labme" width="600">
+			<div class="card-text">
+				For TartanHacks 2019, I worked on an augmented reality chemistry lab
+				with Unity and the Vuforia Engine, aimed towards providing science
+				lab education to the under priveleged. The app uses a smartphone camera
+				to transform normal every day objects into scientific equipment,
+				including bunsen burners and beakers, allowing students to
+				perform bunsen burner flame tests in AR. This project was a finalist
+				for the hackathon and it won the Facebook Social Impact Award. Here is
+				a link to the
+				<a href="https://devpost.com/software/lab-me-xghsku" target="_blank">
+					devpost.
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Mula.</div>
+			<img class="center" src="/images/mula_logo.JPG" alt="mula_logo"
+           width="300">
+			<img class="center" src="/images/mula.png" alt="mula" width="300">
+			<div class="card-text">
+				Mula is an app that uses sentiment analysis of news articles to predict
+				future stock prices with a score given by the app. The stack includes
+				Flutter for the front end and python flask for the back end. This was
+				definitely a cool project for PennApps 2019, as my team and I used
+				various stock and trading APIs to accomplish this. This won the
+				Goldman Sachs Financial Hack award. Here is a link to the
+				<a href="https://devpost.com/software/mula" target="_blank">
+					devpost.
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Build.me</div>
+			<img class="center" src="/images/buildme_logo.png" alt="buildme_logo"
+           width="300">
+			<img class="center" src="/images/buildme.png" alt="buildme"
+           width="600">
+			<div class="card-text">
+				As part of SteelHacks 2019, I developed Build.me, a a mixed reality
+				system that allows engineers and designers to build and create 3D
+				models using the power of your own two hands. Built with Unity, Vuforia,
+				and Leap Motion, Build.me is an artificial environment where users can
+				effortlessly create, rotate, scale objects, and more with hand
+				motions and voice commands. They can save and view their designs in
+				augmented reality with the vuforia engine as well. Our team won 4th
+				place overall with this project. Here is a link to the
+				<a href="https://devpost.com/software/build-me" target="_blank">
+					devpost.
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Med.me</div>
+			<img class="center" src="/images/medme_logo.png" alt="medme_logo"
+           width="300">
+			<img class="center" src="/images/medme.jpg" alt="medme"
+          width="300">
+			<div class="card-text">
+				For Hack This. Help Kids. 2018, Med.me sought to simplify the patient
+				medical history process by directly connecting pedriatic patients to
+				doctors through a simple app that works on a QR code system. Patients can
+				enter their medical history in the application which would be securely
+				stored in a medical database, and doctors can simply scan the QR code in
+				the patients app to automatically enter that into that respective clinic
+				or hospitals system. This aims to solve the problems of habing to fill
+				out form after form every time you visit the doctor's office. The app was
+				developed python flask, google cloud, and react native, and was a finalist
+				for the hackathon. Here is a link to the
+				<a href="https://devpost.com/software/med-me" target="_blank">
+					devpost.
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Trail Trak</div>
+			<img class="center" src="/images/trailtrak.jpg" alt="trailtrak"
+           width="200">
+			<div class="card-text">
+				This was my first hackathon! It was my first time with android app
+				development. Trail Trak is an app where hikers and runners can alert each
+				other about trail conditions and hazards. Built with android studio and
+				the google maps API, Trail Trak allows users to pin locations on a map
+				with a the condition of a trail, which can then be accessed later on for
+				use by other people. This project was second place for the Bloomberg
+				Social Good award. Here is the link to the
+				<a href="https://devpost.com/software/trailtrak" target="_blank">
+					devpost.
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">Twitter Mood Analyzer</div>
+			<img class="center" src="/images/twitter.JPG" alt="twitter mood analyzer"
+           width="600">
+			<div class="card-text">
+				For Hack 112, a hackathon for my intro to CS class, I developed an app
+				that uses the IBM Watson sentiment analysis API and the twitter API to
+				determine the moods of users. It was created all with python and provides
+				a simple visualization of the moods of the user. Here is the link to the
+				<a href="https://github.com/SirLegolot/Twitter-Mood-Analyzer" target="_blank">
+					GitHub repo.
+				</a>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Blog - Neel Gandhi</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel=icon href=/images/favicon.ico>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:
+              wght@300&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <div class="navbar" id="mynavbar">
+    <a href="index.html">Home</a>
+    <a href="projects.html">Portfolio</a>
+    <a href="blog.html" class="cur">Blog</a>
+    <a href="photos.html">Photography</a>
+    <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
+       target="_blank" style="float:right">
+      LinkedIn
+    </a>
+    <a href="https://github.com/SirLegolot" target="_blank" 
+       style="float:right">
+      GitHub
+    </a>
+    <a class="icon" onclick="navButton()">...</a>
+  </div>
+
+  <!-- Back to top button -->
+  <a id="button" href="#">&#11165;</a>
+
+  <!-- Blog cards -->
+  <div id="content">
+    <h2>Click cards to read blogs</h2>
+
+    <a href="/blogs/snake.html" style="text-decoration: none;">
+      <div class="card">
+        <div class="card-header">Javascript Snake</div>
+        <img class="center" src="/images/snake.png" alt="snake" width="600">
+        <div class="card-text">
+          Here's a cool snake game script I wrote while learning javascript.
+        </div>
+      </div>
+    </a>
+
+    <a href="/blogs/hello.html" style="text-decoration: none;">
+      <div class="card">
+        <div class="card-header">Hello, World!</div>
+        <img class="center" src="/images/hello.jpg" alt="hello" width="600">
+        <div class="card-text">
+          Hello! This is my first blog post on my personal website!
+        </div>
+      </div>
+    </a>
+
+    
+
+  </div>
+
+</body>
+
+</html>
