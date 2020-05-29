@@ -45,6 +45,8 @@ window.addEventListener('keydown', ((evt) => {
   if ([37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
     evt.preventDefault();
   }
+  // evt.key returns strings such as "ArrowUp", so we remove the "Arrow" part
+  // to make it easier to understand
   const direction = evt.key.replace('Arrow', '');
   moves.push(direction);
 }));
