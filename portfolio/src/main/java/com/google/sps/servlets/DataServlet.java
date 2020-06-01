@@ -13,6 +13,8 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
+import com.google.gson.Gson;
+import java.util.ArrayList;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -24,9 +26,26 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private ArrayList<String> comments;
+
+  @Override
+  public void init() {
+    comments = new ArrayList<String>();
+    comments.add("This is my first comment!");
+    comments.add("This is so cool!");
+    comments.add("I like trains.");
+  }
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello Neel!</h1>");
+    
+    // convert comments array to json
+    Gson gson = new Gson();
+    String json = gson.toJson(comments);
+    
+
+    // Send the JSON as the response
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 }
