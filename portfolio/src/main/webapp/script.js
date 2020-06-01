@@ -59,9 +59,9 @@ function navButton() {
   }
 }
 
+// Display comments as a bulleted list (will format later)
 function getComments() {
   fetch("/data").then(response => response.json()).then(commentList => {
-    
     // convert the list of comment objects into an html list
     const commentThread = document.getElementById('comments');
     commentList.forEach(comment => {
@@ -73,7 +73,7 @@ function getComments() {
 // Creates an <li> element containing text.
 function createListElement(comment) {
   const liElement = document.createElement('li');
-  liElement.innerText = comment.username + ": " + comment.content + 
-                        "\n Date: " + comment.timeStamp;
+  liElement.innerHTML = comment.username + ": " + comment.content + 
+                        "<br/><i>" + comment.date + "</i>";
   return liElement;
 }

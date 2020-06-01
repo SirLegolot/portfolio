@@ -6,11 +6,11 @@ public class Comment {
 
   private String username;
   private String content;
-  private Date timeStamp;
+  private Date date;
 
-  public Comment(String username, String content, Date timeStamp) {
+  public Comment(String username, String content, Date date) {
     this.username = username;
     this.content = content;
-    this.timeStamp = timeStamp;
+    this.date = date;
   }
 }
