@@ -13,27 +13,26 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fact to the page.
  */
 function addRandomFact() {
-  const greetings =
+  const facts =
       ['My favorite color is red!', 
        'I used to tap dance!', 
        'I still love building with Legos!', 
        'My favorite movie is Intersellar!',
        'In my free time, I love to play table tennis!'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  // Pick a random fact.
+  const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  greetingContainer.innerText = fact;
 }
 
-// Button script
+// Check if scrolled more than 100 pixels to decide whether to show the button.
 $(window).scroll(function() {
-  // check if scrolled more than 100 pixels
   if ($(window).scrollTop() > 100) {
     $('#button').fadeIn();
   } else {
@@ -41,15 +40,16 @@ $(window).scroll(function() {
   }
 });
 
-// When clicked, brings back to top
+// When the button is clicked, the page scrolls to tht top.
 $(document).ready(function() {
   $("#button").click(function(event) {
-    event.preventDefault(); // Stop default action when clicking a button
+    // Stops the default action when clicking a button.
+    event.preventDefault(); 
     $("html, body").animate({ scrollTop: 0 }, "slow");
   });
 });
 
-// Navigation button - expand/contract
+// The navigation button expands and contracts the menu.
 function navButton() {
   var x = document.getElementById("mynavbar");
   if (x.className === "navbar") {
@@ -59,10 +59,10 @@ function navButton() {
   }
 }
 
-// Display comments as a bulleted list (will format later)
+// Displays comments as a bulleted list (will format later).
 function getComments() {
   fetch("/data").then(response => response.json()).then(commentList => {
-    // convert the list of comment objects into an html list
+    // Converts the list of comment objects into an html list.
     const commentThread = document.getElementById('comments');
     commentList.forEach(comment => {
       commentThread.appendChild(createListElement(comment));

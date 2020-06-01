@@ -31,19 +31,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns comments stored in datastore.*/
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+
+  protected DatastoreService datastore;
+  protected Gson gson;
+  protected Query query;
+
+  public DataServlet() {
+    super();
+    datastore = DatastoreServiceFactory.getDatastoreService();
+    query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    gson = new Gson();
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    // create query to order comments by date from data store
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    // Create a query to order the comments by date from datastore.
     PreparedQuery results = datastore.prepare(query);
 
-    // convert to array list of comments
+    // Convert entity objects to an ArrayList of comments.
     ArrayList<Comment> comments = new ArrayList<Comment>();
     for (Entity entity : results.asIterable()) {
       String username = (String) entity.getProperty("username");
@@ -54,11 +63,10 @@ public class DataServlet extends HttpServlet {
       comments.add(comment);
     }
 
-    // convert comments array to json
-    Gson gson = new Gson();
+    // Convert comments ArrayLists to json format.
     String json = gson.toJson(comments);
 
-    // Send the JSON as the response
+    // Send the JSON as the response.
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
@@ -66,20 +74,20 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    // Create comment fields/metadata
+    // Creates comment fields/metadata.
     String username = request.getParameter("username");
     String content = request.getParameter("content");
     Date date = new Date();
     long timestamp = System.currentTimeMillis();
 
-    // Create Entity object
+    // Creates Entity object.
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);
     commentEntity.setProperty("content", content);
     commentEntity.setProperty("date", date);
     commentEntity.setProperty("timestamp", timestamp);
 
-    // connect to datastore and insert entity
+    // Connects to the datastore and inserts the entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
