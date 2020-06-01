@@ -15,6 +15,8 @@
 package com.google.sps.servlets;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Date;
+import com.google.sps.data.Comment;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -26,15 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<String> comments;
-
-  @Override
-  public void init() {
-    comments = new ArrayList<String>();
-    comments.add("This is my first comment!");
-    comments.add("This is so cool!");
-    comments.add("I like trains.");
-  }
+  private ArrayList<Comment> comments = new ArrayList<Comment>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,10 +36,23 @@ public class DataServlet extends HttpServlet {
     // convert comments array to json
     Gson gson = new Gson();
     String json = gson.toJson(comments);
-    
 
     // Send the JSON as the response
     response.setContentType("application/json;");
     response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    
+    // Create a new Comment object to add to comments array
+    String username = request.getParameter("username");
+    String content = request.getParameter("content");
+    Date timeStamp = new Date();
+    Comment newComment = new Comment(username, content, timeStamp);
+    comments.add(newComment);
+
+    // Redirect back to the HTML forum page.
+    response.sendRedirect("/forum.html");
   }
 }

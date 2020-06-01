@@ -59,16 +59,21 @@ function navButton() {
   }
 }
 
-// Fetch test
-async function addGreeting() {
-  const response = await fetch('/data');
-  const greeting = await response.json();
-  const comments = document.getElementById('greeting-container');
-  comments.innerHTML = "";
-  for (let i=0; i<greeting.length; i++) {
-    const liElement = document.createElement('li');
-    liElement.innerText = greeting[i];
-    comments.appendChild(liElement);
-  }
+function getComments() {
+  fetch("/data").then(response => response.json()).then(commentList => {
+    
+    // convert the list of comment objects into an html list
+    const commentThread = document.getElementById('comments');
+    commentList.forEach(comment => {
+      commentThread.appendChild(createListElement(comment));
+    });
+  });
 }
 
+// Creates an <li> element containing text.
+function createListElement(comment) {
+  const liElement = document.createElement('li');
+  liElement.innerText = comment.username + ": " + comment.content + 
+                        "\n Date: " + comment.timeStamp;
+  return liElement;
+}
