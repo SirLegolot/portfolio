@@ -55,8 +55,8 @@ public class DataServlet extends HttpServlet {
     // Convert entity objects to an ArrayList of comments.
     ArrayList<Comment> comments = new ArrayList<Comment>();
     for (Entity entity : results.asIterable()) {
-      String username = (String) entity.getProperty("username");
-      String content = (String) entity.getProperty("content");
+      String username = entity.getProperty("username").toString();
+      String content = entity.getProperty("content").toString();
       Date date = (Date) entity.getProperty("date");
 
       Comment comment = new Comment(username, content, date);
