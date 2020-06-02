@@ -29,7 +29,7 @@ public class DeleteDataServlet extends HttpServlet {
   public DeleteDataServlet() {
     super();
     datastore = DatastoreServiceFactory.getDatastoreService();
-    query = new Query("Person").setKeysOnly();
+    query = new Query("Comment").setKeysOnly();
   }
 
   @Override
@@ -38,14 +38,12 @@ public class DeleteDataServlet extends HttpServlet {
     // Create a query to retrieve the keys of all the comments.
     PreparedQuery results = datastore.prepare(query);
 
-    // // Convert prepared query to a list of keys.
-    // List<Key> keys = new ArrayList<Key>();
-    // for (Key key : results.asIterable()) {
-    //   keys.add(key);
-    // }
+    // Convert prepared query to a list of keys.
+    List<Key> keys = new ArrayList<Key>();
+    for (Entity entity : results.asIterable()) {
+      keys.add(entity.getKey());
+    }
 
-    // List<Entity> blah = results.asList();
-
-    // datastore.delete();
+    datastore.delete(keys);
   }
 }

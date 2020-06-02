@@ -85,6 +85,7 @@ function createListElement(comment) {
   return liElement;
 }
 
-function clearComments () {
+// Deletes all comments from datastore and refreshes.
+function clearComments() {
   fetch("/delete-data", {method: 'POST'}).then(() => getComments());
 }
