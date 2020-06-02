@@ -12,7 +12,7 @@
   <script src="script.js"></script>
 </head>
 
-<body>
+<body onload="getComments()">
   <!-- Navigation Bar -->
   <div class="navbar" id="mynavbar">
     <a href="index.html" class="cur">Home</a>
@@ -34,26 +34,19 @@
   <!-- Back to top button -->
   <a id="button" href="#">&#11165;</a>
 
-  <!-- Brief Summary About Myself -->
+  <!-- Comments feature -->
   <div id="content">
-    <h1>Neel Gandhi</h1>
-    <img class="center" 
-         src="/images/neel_photo.JPG" 
-         alt="Profile Photo"
-         width="300"
-         height="300"
-         style="border-radius: 50%;">
-    <p>
-      Hi! My name is Neel Gandhi and I'm a rising junior at Carnegie Mellon
-      University. I study Electrical and Computer Engineering, and I have
-      interests in a wide variety of things, including computer systems,
-      computer vision, parallel computing, and brain computer interfacing. 
-    </p>
-    <p>Click here to get a random fact about myself:</p>
-    <button onclick="addRandomFact()">I'm Feeling Curious</button>
-    <div id="greeting-container"></div>
+    <form action="/data" method="POST">
+      <p>Username:</p>
+      <input type="text" name="username" value="John"><br/>
+      
+      <p>Comment:</p>
+      <textarea name="content">Hello, World!</textarea>
+      <br/><br/>
 
-    <a href="forum.html">Access Forum (dev)</a>
+      <input type="submit" />
+    </form>
+    <ul id="comments"></ul>
   </div>
 </body>
 
