@@ -64,17 +64,10 @@ function getComments() {
 
   // Determines the number of comments to be displayed from the select box.
   const selectEl = document.getElementById("numComments");
-  const displayText = selectEl.options[selectEl.selectedIndex].value;
-  const displayCount = parseInt(displayText, 10);
+  const displayCount = selectEl.options[selectEl.selectedIndex].value;
+  const queryString = "/data?numComments="+displayCount;
 
-  fetch("/data").then(response => response.json()).then(commentList => {
-    // Displays only the number of comments requested. If displayCount is 
-    // negative, it will display all comments.
-    if (displayCount > 0) {
-      commentList = commentList.slice(0, 
-                      Math.min(displayCount, commentList.length));
-    }
-    
+  fetch(queryString).then(response => response.json()).then(commentList => { 
     // Converts the list of comment objects into an html list.
     const commentThread = document.getElementById('comments');
     commentThread.innerText = '';
@@ -90,4 +83,8 @@ function createListElement(comment) {
   liElement.innerHTML = comment.username + ": " + comment.content + 
                         "<br/><i>" + comment.date + "</i>";
   return liElement;
+}
+
+function clearComments () {
+  fetch("/delete-data", {method: 'POST'}).then(() => getComments());
 }
