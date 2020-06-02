@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 // The navigation button expands and contracts the menu.
 function navButton() {
-  var x = document.getElementById("mynavbar");
+  let x = document.getElementById("mynavbar");
   if (x.className === "navbar") {
     x.className += " responsive";
   } else {
@@ -61,9 +61,23 @@ function navButton() {
 
 // Displays comments as a bulleted list (will format later).
 function getComments() {
+
+  // Determines the number of comments to be displayed from the select box.
+  const selectEl = document.getElementById("numComments");
+  const displayText = selectEl.options[selectEl.selectedIndex].value;
+  const displayCount = parseInt(displayText, 10);
+
   fetch("/data").then(response => response.json()).then(commentList => {
+    // Displays only the number of comments requested. If displayCount is 
+    // negative, it will display all comments.
+    if (displayCount > 0) {
+      commentList = commentList.slice(0, 
+                      Math.min(displayCount, commentList.length));
+    }
+    
     // Converts the list of comment objects into an html list.
     const commentThread = document.getElementById('comments');
+    commentThread.innerText = '';
     commentList.forEach(comment => {
       commentThread.appendChild(createListElement(comment));
     });
