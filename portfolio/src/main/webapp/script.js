@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 // The navigation button expands and contracts the menu.
 function navButton() {
-  var x = document.getElementById("mynavbar");
+  let x = document.getElementById("mynavbar");
   if (x.className === "navbar") {
     x.className += " responsive";
   } else {
@@ -61,9 +61,16 @@ function navButton() {
 
 // Displays comments as a bulleted list (will format later).
 function getComments() {
-  fetch("/data").then(response => response.json()).then(commentList => {
+
+  // Determines the number of comments to be displayed from the select box.
+  const selectEl = document.getElementById("numComments");
+  const displayCount = selectEl.options[selectEl.selectedIndex].value;
+  const queryString = "/data?numComments="+displayCount;
+
+  fetch(queryString).then(response => response.json()).then(commentList => { 
     // Converts the list of comment objects into an html list.
     const commentThread = document.getElementById('comments');
+    commentThread.innerText = '';
     commentList.forEach(comment => {
       commentThread.appendChild(createListElement(comment));
     });
@@ -76,4 +83,9 @@ function createListElement(comment) {
   liElement.innerHTML = comment.username + ": " + comment.content + 
                         "<br/><i>" + comment.date + "</i>";
   return liElement;
+}
+
+// Deletes all comments from datastore and refreshes.
+function clearComments() {
+  fetch("/delete-data", {method: 'POST'}).then(() => getComments());
 }

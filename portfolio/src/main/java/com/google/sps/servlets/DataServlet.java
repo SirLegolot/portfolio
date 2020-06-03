@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import com.google.sps.data.Comment;
 
@@ -24,6 +25,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -50,19 +52,25 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Create a query to order the comments by date from datastore.
-    PreparedQuery results = datastore.prepare(query);
+    PreparedQuery pq = datastore.prepare(query);
 
-    // Convert entity objects to an ArrayList of comments.
+    // Get specified number of comments. 
+    int count = Integer.parseInt(request.getParameter("numComments"));
     ArrayList<Comment> comments = new ArrayList<Comment>();
-    for (Entity entity : results.asIterable()) {
-      String username = entity.getProperty("username").toString();
-      String content = entity.getProperty("content").toString();
-      Date date = (Date) entity.getProperty("date");
-
-      Comment comment = new Comment(username, content, date);
-      comments.add(comment);
+    
+    // A positive count indicates that only that number of comments will be
+    // retrieved. A negative count indicates to retrieve all comments.
+    if (count > 0) {
+      List<Entity> results = pq.asList(FetchOptions.Builder.withLimit(count));
+      for (int i = 0; i < results.size(); i++) {
+        comments.add(createComment(results.get(i)));
+      }
+    } else {
+      for (Entity entity : pq.asIterable()) {
+        comments.add(createComment(entity));
+      }
     }
-
+  
     // Convert comments ArrayLists to json format.
     String json = gson.toJson(comments);
 
@@ -93,5 +101,12 @@ public class DataServlet extends HttpServlet {
 
     // Redirect back to the HTML forum page.
     response.sendRedirect("/forum.html");
+  }
+
+  public Comment createComment(Entity entity) {
+    String username = entity.getProperty("username").toString();
+    String content = entity.getProperty("content").toString();
+    Date date = (Date) entity.getProperty("date");
+    return (new Comment(username, content, date));
   }
 }

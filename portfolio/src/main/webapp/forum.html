@@ -37,16 +37,32 @@
   <!-- Comments feature -->
   <div id="content">
     <form action="/data" method="POST">
-      <p>Username:</p>
-      <input type="text" name="username" value="John"><br/>
-      
-      <p>Comment:</p>
-      <textarea name="content">Hello, World!</textarea>
+      <label for="username">Username:</label><br/>
+      <input type="text" name="username" id="username" value="John"><br/><br/>
+      <label for="txtbox">Comment:</label><br/>
+      <textarea rows="4" cols="50" name="content" id="txtbox">Hello!</textarea>
       <br/><br/>
 
-      <input type="submit" />
+      <input type="submit">
     </form>
+
+    <h2>Comments</h2>
+    <!-- Choose how many comments to see on a page. -->
+    <label for="numComments"># Comments to display:</label>
+    <select name="numComments" id="numComments" onchange="getComments()">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20" selected>20</option>
+      <option value="25">25</option>
+      <option value="30">30</option>
+      <option value="-1">All</option>
+    </select>
+
+    <!-- Comments container is an unordered list. -->
     <ul id="comments"></ul>
+
+    <button onclick="clearComments()">Clear Comments (Dev)</button>
   </div>
 </body>
 
