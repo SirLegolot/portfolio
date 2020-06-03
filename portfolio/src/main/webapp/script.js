@@ -79,10 +79,30 @@ function getComments() {
 
 // Creates an <li> element containing text.
 function createListElement(comment) {
-  const liElement = document.createElement('li');
-  liElement.innerHTML = comment.username + ": " + comment.content + 
-                        "<br/><i>" + comment.date + "</i>";
-  return liElement;
+  const li = document.createElement('li');
+  li.setAttribute('class', 'cmmnt');
+  const div = document.createElement('div');
+  div.setAttribute('class', 'cmmnt-content');
+
+  // Comment content contains an avatar, header, and paragraph text.
+  const img = document.createElement('img');
+  img.setAttribute('class', 'avatar');
+  img.setAttribute('src', '/images/profile.jpg');
+  img.setAttribute('width', '40');
+  img.setAttribute('height', '40');
+  img.setAttribute('alt', 'profile_photo');
+  const header = document.createElement('header');
+  header.innerHTML = "<span class='userlink'>" + comment.username + "</span>" + 
+                     " - <span class='pubdate'>" + comment.date + "</span>"
+  const p = document.createElement('p');
+  p.innerText = comment.content;
+  
+  // Adding all the components that make up a comment.
+  li.appendChild(img);
+  div.appendChild(header);
+  div.appendChild(p);
+  li.appendChild(div);
+  return li;
 }
 
 // Deletes all comments from datastore and refreshes.

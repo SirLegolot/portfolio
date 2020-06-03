@@ -170,3 +170,56 @@ div.gallery img {
 .clear {
   clear: both;
 }
+
+/* Comments */
+#username {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  width: 99%;
+}
+
+#txtbox {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  width: 99%;
+}
+
+/* Comments area */
+#comments { 
+  display: block; 
+  padding: 0;
+}
+
+#comments .cmmnt { 
+  display: block; 
+  position: relative; 
+  border-top: 1px solid #ddd; 
+}
+
+#comments .cmmnt::after {
+  content: "";
+  display: block;
+  clear: both;
+} 
+
+#comments .cmmnt .avatar  { 
+  display: block;
+  float: left;
+  padding: 8px;
+}
+#comments .cmmnt .avatar img { 
+  border-radius: 50%;
+}
+
+#comments .cmmnt .cmmnt-content { 
+  display: block;
+  float: left;
+  padding: 8px;
+}
+
+#comments .cmmnt .cmmnt-content header .pubdate { 
+  color: #777; 
+}
+#comments .cmmnt .cmmnt-content header .userlink { 
+  font-weight: bold; 
+} 

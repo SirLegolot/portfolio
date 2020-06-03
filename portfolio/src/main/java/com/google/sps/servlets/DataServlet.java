@@ -100,10 +100,10 @@ public class DataServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     // Redirect back to the HTML forum page.
-    response.sendRedirect("/forum.html");
+    response.sendRedirect("/blog.html");
   }
 
-  public Comment createComment(Entity entity) {
+  private Comment createComment(Entity entity) {
     String username = entity.getProperty("username").toString();
     String content = entity.getProperty("content").toString();
     Date date = (Date) entity.getProperty("date");

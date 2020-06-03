@@ -12,7 +12,7 @@
   <script src="script.js"></script>
 </head>
 
-<body>
+<body onload="getComments()">
   <!-- Navigation Bar -->
   <div class="navbar" id="mynavbar">
     <a href="index.html">Home</a>
@@ -57,7 +57,43 @@
       </div>
     </a>
 
-    
+    <!-- Comment Section -->
+    <div class="card">
+      <div class="card-header">Comments</div>
+      <div class="card-text">
+        <!-- Choose how many comments to see on a page. -->
+        <label for="numComments"># Comments to display:</label>
+        <select name="numComments" id="numComments" onchange="getComments()">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20" selected>20</option>
+          <option value="25">25</option>
+          <option value="30">30</option>
+          <option value="-1">All</option>
+        </select>
+
+        <!-- Comments container is an unordered list. -->
+        <ul id="comments"></ul>
+
+        <button onclick="clearComments()">Clear Comments (Dev)</button>
+      </div>
+    </div>
+
+    <!-- Leave a Comment form. -->
+    <div class="card">
+      <div class="card-header">Leave a Comment</div>
+      <div class="card-text">
+        <form action="/data" method="POST">
+          <label for="username">Username*</label><br/>
+          <input type="text" name="username" id="username" required><br/><br/>
+          <label for="txtbox">Comment*</label><br/>
+          <textarea rows="5" name="content" id="txtbox" required></textarea>
+          <br/><br/>
+          <input type="submit">
+        </form>
+      </div>
+    </div>
 
   </div>
 
