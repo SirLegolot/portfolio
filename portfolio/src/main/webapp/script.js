@@ -63,9 +63,14 @@ function navButton() {
 function getComments() {
 
   // Determines the number of comments to be displayed from the select box.
-  const selectEl = document.getElementById("numComments");
-  const displayCount = selectEl.options[selectEl.selectedIndex].value;
-  const queryString = "/data?numComments="+displayCount;
+  const countEl = document.getElementById("numComments");
+  const displayCount = countEl.options[countEl.selectedIndex].value;
+
+  // Determines order in which to display comments with respect to time.
+  const sortEl = document.getElementById("sortOrder");
+  const sortOrder = sortEl.options[sortEl.selectedIndex].value;
+  const queryString = "/data?numComments=" + displayCount +
+                      "&sortOrder=" + sortOrder;
 
   fetch(queryString).then(response => response.json()).then(commentList => { 
     // Converts the list of comment objects into an html list.

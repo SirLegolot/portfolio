@@ -62,16 +62,26 @@
       <div class="card-header">Comments</div>
       <div class="card-text">
         <!-- Choose how many comments to see on a page. -->
-        <label for="numComments"># Comments to display:</label>
-        <select name="numComments" id="numComments" onchange="getComments()">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20" selected>20</option>
-          <option value="25">25</option>
-          <option value="30">30</option>
-          <option value="-1">All</option>
-        </select>
+        <div class="commentOptions">
+          <label for="numComments">Comments to display:</label>
+          <select name="numComments" id="numComments" onchange="getComments()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20" selected>20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="-1">All</option>
+          </select>
+        </div>
+        <!-- Choose order in which to display comments. -->
+        <div class="commentOptions">
+          <label for="sortOrder">Sort by time:</label>
+          <select name="sortOrder" id="sortOrder" onchange="getComments()">
+            <option value="descending" selected>Newest first</option>
+            <option value="ascending">Oldest first</option>
+          </select>
+        </div>
 
         <!-- Comments container is an unordered list. -->
         <ul id="comments"></ul>

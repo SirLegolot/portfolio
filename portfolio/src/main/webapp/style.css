@@ -188,6 +188,7 @@ div.gallery img {
 #comments { 
   display: block; 
   padding: 0;
+  padding-top: 25px;
 }
 
 #comments .cmmnt { 
@@ -196,7 +197,7 @@ div.gallery img {
   border-top: 1px solid #ddd; 
 }
 
-#comments .cmmnt::after {
+#comments .cmmnt::after, .cmmnt::before {
   content: "";
   display: block;
   clear: both;
@@ -223,3 +224,10 @@ div.gallery img {
 #comments .cmmnt .cmmnt-content header .userlink { 
   font-weight: bold; 
 } 
+
+.commentOptions {
+  display: block;
+  float: left;
+  padding: 8px;
+  padding-top: 0px;
+}
