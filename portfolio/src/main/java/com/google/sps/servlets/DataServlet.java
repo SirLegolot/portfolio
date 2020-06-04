@@ -39,19 +39,25 @@ public class DataServlet extends HttpServlet {
 
   protected DatastoreService datastore;
   protected Gson gson;
-  protected Query query;
+  protected Query queryAscending;
+  protected Query queryDescending;
 
   public DataServlet() {
     super();
     datastore = DatastoreServiceFactory.getDatastoreService();
-    query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    queryDescending = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    queryAscending = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
     gson = new Gson();
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    // Create a query to order the comments by date from datastore.
+    // Create a query to order the comments by date from datastore, either
+    // ascending or descending.
+    String sortOrder = request.getParameter("sortOrder");
+    Query query = queryDescending;
+    if (sortOrder.equals("ascending")) query = queryAscending;
     PreparedQuery pq = datastore.prepare(query);
 
     // Get specified number of comments. 
@@ -100,10 +106,10 @@ public class DataServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     // Redirect back to the HTML forum page.
-    response.sendRedirect("/forum.html");
+    response.sendRedirect("/blog.html");
   }
 
-  public Comment createComment(Entity entity) {
+  private Comment createComment(Entity entity) {
     String username = entity.getProperty("username").toString();
     String content = entity.getProperty("content").toString();
     Date date = (Date) entity.getProperty("date");

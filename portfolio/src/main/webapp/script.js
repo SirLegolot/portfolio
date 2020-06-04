@@ -63,13 +63,18 @@ function navButton() {
 function getComments() {
 
   // Determines the number of comments to be displayed from the select box.
-  const selectEl = document.getElementById("numComments");
-  const displayCount = selectEl.options[selectEl.selectedIndex].value;
-  const queryString = "/data?numComments="+displayCount;
+  const countEl = document.getElementById("numComments");
+  const displayCount = countEl.options[countEl.selectedIndex].value;
+
+  // Determines order in which to display comments with respect to time.
+  const sortEl = document.getElementById("sortOrder");
+  const sortOrder = sortEl.options[sortEl.selectedIndex].value;
+  const queryString = "/data?numComments=" + displayCount +
+                      "&sortOrder=" + sortOrder;
 
   fetch(queryString).then(response => response.json()).then(commentList => { 
     // Converts the list of comment objects into an html list.
-    const commentThread = document.getElementById('comments');
+    const commentThread = document.getElementById('commentThread');
     commentThread.innerText = '';
     commentList.forEach(comment => {
       commentThread.appendChild(createListElement(comment));
@@ -79,10 +84,30 @@ function getComments() {
 
 // Creates an <li> element containing text.
 function createListElement(comment) {
-  const liElement = document.createElement('li');
-  liElement.innerHTML = comment.username + ": " + comment.content + 
-                        "<br/><i>" + comment.date + "</i>";
-  return liElement;
+  const li = document.createElement('li');
+  li.setAttribute('class', 'comment');
+  const div = document.createElement('div');
+  div.setAttribute('class', 'comment-content');
+
+  // Comment content contains an avatar, header, and paragraph text.
+  const img = document.createElement('img');
+  img.setAttribute('class', 'avatar');
+  img.setAttribute('src', '/images/profile.jpg');
+  img.setAttribute('width', '40px');
+  img.setAttribute('height', '40px');
+  img.setAttribute('alt', 'profile_photo');
+  const header = document.createElement('header');
+  header.innerHTML = "<span class='userlink'>" + comment.username + "</span>" + 
+                     " - <span class='pubdate'>" + comment.date + "</span>"
+  const p = document.createElement('p');
+  p.innerText = comment.content;
+  
+  // Adding all the components that make up a comment.
+  li.appendChild(img);
+  div.appendChild(header);
+  div.appendChild(p);
+  li.appendChild(div);
+  return li;
 }
 
 // Deletes all comments from datastore and refreshes.
