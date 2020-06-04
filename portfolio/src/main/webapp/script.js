@@ -74,7 +74,7 @@ function getComments() {
 
   fetch(queryString).then(response => response.json()).then(commentList => { 
     // Converts the list of comment objects into an html list.
-    const commentThread = document.getElementById('comments');
+    const commentThread = document.getElementById('commentThread');
     commentThread.innerText = '';
     commentList.forEach(comment => {
       commentThread.appendChild(createListElement(comment));
@@ -85,16 +85,16 @@ function getComments() {
 // Creates an <li> element containing text.
 function createListElement(comment) {
   const li = document.createElement('li');
-  li.setAttribute('class', 'cmmnt');
+  li.setAttribute('class', 'comment');
   const div = document.createElement('div');
-  div.setAttribute('class', 'cmmnt-content');
+  div.setAttribute('class', 'comment-content');
 
   // Comment content contains an avatar, header, and paragraph text.
   const img = document.createElement('img');
   img.setAttribute('class', 'avatar');
   img.setAttribute('src', '/images/profile.jpg');
-  img.setAttribute('width', '40');
-  img.setAttribute('height', '40');
+  img.setAttribute('width', '40px');
+  img.setAttribute('height', '40px');
   img.setAttribute('alt', 'profile_photo');
   const header = document.createElement('header');
   header.innerHTML = "<span class='userlink'>" + comment.username + "</span>" + 

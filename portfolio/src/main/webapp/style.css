@@ -171,7 +171,7 @@ div.gallery img {
   clear: both;
 }
 
-/* Comments */
+/* Leave a Comment inputs */
 #username {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -185,43 +185,35 @@ div.gallery img {
 }
 
 /* Comments area */
-#comments { 
+#commentThread { 
   display: block; 
   padding: 0;
   padding-top: 25px;
 }
 
-#comments .cmmnt { 
-  display: block; 
+#commentThread .comment { 
+  display: flex; 
   position: relative; 
   border-top: 1px solid #ddd; 
 }
 
-#comments .cmmnt::after, .cmmnt::before {
-  content: "";
-  display: block;
-  clear: both;
-} 
-
-#comments .cmmnt .avatar  { 
-  display: block;
-  float: left;
+#commentThread .comment .avatar  { 
+  flex: none;
   padding: 8px;
 }
-#comments .cmmnt .avatar img { 
+#commentThread .comment .avatar img { 
   border-radius: 50%;
 }
 
-#comments .cmmnt .cmmnt-content { 
-  display: block;
-  float: left;
+#commentThread .comment .comment-content { 
+  flex: auto;
   padding: 8px;
 }
 
-#comments .cmmnt .cmmnt-content header .pubdate { 
+#commentThread .comment .comment-content header .pubdate { 
   color: #777; 
 }
-#comments .cmmnt .cmmnt-content header .userlink { 
+#commentThread .comment .comment-content header .userlink { 
   font-weight: bold; 
 } 
 

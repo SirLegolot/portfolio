@@ -39,14 +39,14 @@ public class DataServlet extends HttpServlet {
 
   protected DatastoreService datastore;
   protected Gson gson;
-  protected Query queryA;
-  protected Query queryD;
+  protected Query queryAscending;
+  protected Query queryDescending;
 
   public DataServlet() {
     super();
     datastore = DatastoreServiceFactory.getDatastoreService();
-    queryD = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    queryA = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+    queryDescending = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    queryAscending = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
     gson = new Gson();
   }
 
@@ -56,8 +56,8 @@ public class DataServlet extends HttpServlet {
     // Create a query to order the comments by date from datastore, either
     // ascending or descending.
     String sortOrder = request.getParameter("sortOrder");
-    Query query = queryD;
-    if (sortOrder.equals("ascending")) query = queryA;
+    Query query = queryDescending;
+    if (sortOrder.equals("ascending")) query = queryAscending;
     PreparedQuery pq = datastore.prepare(query);
 
     // Get specified number of comments. 
