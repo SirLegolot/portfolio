@@ -105,17 +105,21 @@ function createListElement(comment) {
   // Add optional image, if user uploaded one.
   const uploaded = comment.imageURL != null;
   const imgUpload = document.createElement('img');
+  const imgLink = document.createElement('a');
   if (uploaded) {
+    imgLink.setAttribute('href', comment.imageURL);
+    imgLink.setAttribute('target', '_blank');
     imgUpload.setAttribute('src', comment.imageURL);
     imgUpload.setAttribute('width', '300px');
     imgUpload.setAttribute('alt', 'Uploaded_image');
+    imgLink.appendChild(imgUpload);
   }
 
   // Adding all the components that make up a comment.
   li.appendChild(img);
   div.appendChild(header);
   div.appendChild(p);
-  if (uploaded) div.appendChild(imgUpload);
+  if (uploaded) div.appendChild(imgLink);
   li.appendChild(div);
   return li;
 }
