@@ -54,6 +54,8 @@ public class DataServlet extends HttpServlet {
   protected Gson gson;
   protected Query queryAscending;
   protected Query queryDescending;
+  protected BlobstoreService blobstoreService;
+  protected ImagesService imagesService;
 
   public DataServlet() {
     super();
@@ -61,6 +63,8 @@ public class DataServlet extends HttpServlet {
     queryDescending = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     queryAscending = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
     gson = new Gson();
+    blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    imagesService = ImagesServiceFactory.getImagesService();
   }
 
   @Override
@@ -143,7 +147,6 @@ public class DataServlet extends HttpServlet {
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
@@ -166,7 +169,7 @@ public class DataServlet extends HttpServlet {
     // https://stackoverflow.com/q/10779564/873165
 
     // Use ImagesService to get a URL that points to the uploaded file.
-    ImagesService imagesService = ImagesServiceFactory.getImagesService();
+    
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 
     // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
