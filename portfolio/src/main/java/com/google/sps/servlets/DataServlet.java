@@ -106,7 +106,7 @@ public class DataServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     // Redirect back to the HTML forum page.
-    response.sendRedirect("/blog.html");
+    response.sendRedirect("/forum.html");
   }
 
   private Comment createComment(Entity entity) {

@@ -6,8 +6,6 @@
   <title>Blog - Neel Gandhi</title>
   <link rel="stylesheet" href="style.css">
   <link rel=icon href=/images/favicon.ico>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:
-              wght@300&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="script.js"></script>
 </head>
@@ -18,6 +16,7 @@
     <a href="index.html">Home</a>
     <a href="projects.html">Portfolio</a>
     <a href="blog.html" class="cur">Blog</a>
+    <a href="forum.html">Forum</a>
     <a href="photos.html">Photography</a>
     <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
        target="_blank" style="float:right">
@@ -56,54 +55,6 @@
         </div>
       </div>
     </a>
-
-    <!-- Comment Section -->
-    <div class="card">
-      <div class="card-header">Comments</div>
-      <div class="card-text">
-        <!-- Choose how many comments to see on a page. -->
-        <div class="commentOptions">
-          <label for="numComments">Comments to display:</label>
-          <select name="numComments" id="numComments" onchange="getComments()">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20" selected>20</option>
-            <option value="25">25</option>
-            <option value="30">30</option>
-            <option value="-1">All</option>
-          </select>
-        </div>
-        <!-- Choose order in which to display comments. -->
-        <div class="commentOptions">
-          <label for="sortOrder">Sort by time:</label>
-          <select name="sortOrder" id="sortOrder" onchange="getComments()">
-            <option value="descending" selected>Newest first</option>
-            <option value="ascending">Oldest first</option>
-          </select>
-        </div>
-
-        <!-- Comments container is an unordered list. -->
-        <ul id="commentThread"></ul>
-
-        <button onclick="clearComments()">Clear Comments (Dev)</button>
-      </div>
-    </div>
-
-    <!-- Leave a Comment form. -->
-    <div class="card">
-      <div class="card-header">Leave a Comment</div>
-      <div class="card-text">
-        <form action="/data" method="POST">
-          <label for="username">Username*</label><br/>
-          <input type="text" name="username" id="username" required><br/><br/>
-          <label for="txtbox">Comment*</label><br/>
-          <textarea rows="5" name="content" id="txtbox" required></textarea>
-          <br/><br/>
-          <input type="submit">
-        </form>
-      </div>
-    </div>
 
   </div>
 
