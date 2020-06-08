@@ -1,3 +1,10 @@
+<%-- Create blobstore url to send images to. Also sets up forwarding to the
+     form handler "/data". --%>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+   String uploadUrl = blobstoreService.createUploadUrl("/data"); %>
+
 <!DOCTYPE html>
 <html>
 
@@ -16,7 +23,7 @@
     <a href="index.html">Home</a>
     <a href="projects.html">Portfolio</a>
     <a href="blog.html">Blog</a>
-    <a href="forum.html" class="cur">Forum</a>
+    <a href="forum.jsp" class="cur">Forum</a>
     <a href="photos.html">Photography</a>
     <a href="https://www.linkedin.com/in/neel-gandhi-5b7355148/"
        target="_blank" style="float:right">
@@ -72,12 +79,14 @@
     <div class="card">
       <div class="card-header">Leave a Comment</div>
       <div class="card-text">
-        <form action="/data" method="POST">
+        <form action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
           <label for="username">Username*</label><br/>
           <input type="text" name="username" id="username" required><br/><br/>
           <label for="txtbox">Comment*</label><br/>
           <textarea rows="5" name="content" id="txtbox" required></textarea>
           <br/><br/>
+          <label for="image">Add an image (optional)</label><br/>
+          <input type="file" name="image" id="image" accept="image/*"><br/><br/>
           <input type="submit">
         </form>
       </div>
