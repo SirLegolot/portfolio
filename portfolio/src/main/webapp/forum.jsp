@@ -45,7 +45,9 @@
     <!-- Comment Section -->
     <div class="card">
       <div class="card-header">Comments 
-        <a href="javascript:getComments()" class="reload"><b>&#x21bb;</b></a>
+        <a href="javascript:void(0);" onclick="getComments()" class="reload">
+          <b>&#x21bb;</b>
+        </a>
       </div>
       <div class="card-text">
         <!-- Choose how many comments to see on a page. -->
