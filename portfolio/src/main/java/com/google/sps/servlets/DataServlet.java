@@ -79,8 +79,12 @@ public class DataServlet extends HttpServlet {
 
     // Get specified number of comments. 
     String countString = request.getParameter("numComments");
-    int count = -1;
-    if (countString != null) count = Integer.parseInt(countString);
+    int count;
+    try {
+      count = Integer.parseInt(countString);
+    } catch (NumberFormatException e) {
+      count = -1;
+    }
     
     ArrayList<Comment> comments = new ArrayList<Comment>();
     
@@ -165,11 +169,7 @@ public class DataServlet extends HttpServlet {
       return null;
     }
 
-    // We could check the validity of the file here, e.g. to make sure it's an image file
-    // https://stackoverflow.com/q/10779564/873165
-
     // Use ImagesService to get a URL that points to the uploaded file.
-    
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 
     // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
