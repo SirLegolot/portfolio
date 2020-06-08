@@ -70,11 +70,14 @@ public class DataServlet extends HttpServlet {
     // ascending or descending.
     String sortOrder = request.getParameter("sortOrder");
     Query query = queryDescending;
-    if (sortOrder.equals("ascending")) query = queryAscending;
+    if (sortOrder != null && sortOrder.equals("ascending")) query = queryAscending;
     PreparedQuery pq = datastore.prepare(query);
 
     // Get specified number of comments. 
-    int count = Integer.parseInt(request.getParameter("numComments"));
+    String countString = request.getParameter("numComments");
+    int count = -1;
+    if (countString != null) count = Integer.parseInt(countString);
+    
     ArrayList<Comment> comments = new ArrayList<Comment>();
     
     // A positive count indicates that only that number of comments will be

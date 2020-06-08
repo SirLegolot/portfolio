@@ -102,10 +102,20 @@ function createListElement(comment) {
   const p = document.createElement('p');
   p.innerText = comment.content;
   
+  // Add optional image, if user uploaded one.
+  const uploaded = comment.imageURL != null;
+  const imgUpload = document.createElement('img');
+  if (uploaded) {
+    imgUpload.setAttribute('src', comment.imageURL);
+    imgUpload.setAttribute('width', '300px');
+    imgUpload.setAttribute('alt', 'Uploaded_image');
+  }
+
   // Adding all the components that make up a comment.
   li.appendChild(img);
   div.appendChild(header);
   div.appendChild(p);
+  if (uploaded) div.appendChild(imgUpload);
   li.appendChild(div);
   return li;
 }

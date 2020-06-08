@@ -44,7 +44,9 @@
 
     <!-- Comment Section -->
     <div class="card">
-      <div class="card-header">Comments</div>
+      <div class="card-header">Comments 
+        <a href="javascript:getComments()" class="reload"><b>&#x21bb;</b></a>
+      </div>
       <div class="card-text">
         <!-- Choose how many comments to see on a page. -->
         <div class="commentOptions">
@@ -85,8 +87,8 @@
           <label for="txtbox">Comment*</label><br/>
           <textarea rows="5" name="content" id="txtbox" required></textarea>
           <br/><br/>
-          <label for="image">Add an image (optional)</label><br/>
-          <input type="file" name="image" id="image" accept="image/*"><br/><br/>
+          <label for="imageURL">Add an image (optional)</label><br/>
+          <input type="file" name="imageURL" id="imageURL" accept="image/*"><br/><br/>
           <input type="submit">
         </form>
       </div>
