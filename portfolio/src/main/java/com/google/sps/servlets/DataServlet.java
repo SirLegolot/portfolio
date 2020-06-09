@@ -33,6 +33,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
 /** Servlet that returns comments stored in datastore.*/
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -41,6 +54,8 @@ public class DataServlet extends HttpServlet {
   protected Gson gson;
   protected Query queryAscending;
   protected Query queryDescending;
+  protected BlobstoreService blobstoreService;
+  protected ImagesService imagesService;
 
   public DataServlet() {
     super();
@@ -48,6 +63,8 @@ public class DataServlet extends HttpServlet {
     queryDescending = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     queryAscending = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
     gson = new Gson();
+    blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    imagesService = ImagesServiceFactory.getImagesService();
   }
 
   @Override
@@ -57,11 +74,18 @@ public class DataServlet extends HttpServlet {
     // ascending or descending.
     String sortOrder = request.getParameter("sortOrder");
     Query query = queryDescending;
-    if (sortOrder.equals("ascending")) query = queryAscending;
+    if (sortOrder != null && sortOrder.equals("ascending")) query = queryAscending;
     PreparedQuery pq = datastore.prepare(query);
 
     // Get specified number of comments. 
-    int count = Integer.parseInt(request.getParameter("numComments"));
+    String countString = request.getParameter("numComments");
+    int count;
+    try {
+      count = Integer.parseInt(countString);
+    } catch (NumberFormatException e) {
+      count = -1;
+    }
+    
     ArrayList<Comment> comments = new ArrayList<Comment>();
     
     // A positive count indicates that only that number of comments will be
@@ -93,6 +117,8 @@ public class DataServlet extends HttpServlet {
     String content = request.getParameter("content");
     Date date = new Date();
     long timestamp = System.currentTimeMillis();
+    // Get the URL of the image that the user uploaded to Blobstore.
+    String imageURL = getUploadedFileUrl(request, "imageURL");
 
     // Creates Entity object.
     Entity commentEntity = new Entity("Comment");
@@ -100,19 +126,59 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("content", content);
     commentEntity.setProperty("date", date);
     commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("imageURL", imageURL);
 
     // Connects to the datastore and inserts the entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
     // Redirect back to the HTML forum page.
-    response.sendRedirect("/blog.html");
+    response.sendRedirect("/forum.jsp");
   }
 
+  // Helper functions/routines:
+
+  // Creates a comment object from the inputs.
   private Comment createComment(Entity entity) {
     String username = entity.getProperty("username").toString();
     String content = entity.getProperty("content").toString();
+    Object imageURLObject = entity.getProperty("imageURL");
+    String imageURL = null;
+    if (imageURLObject != null) imageURL = imageURLObject.toString();
     Date date = (Date) entity.getProperty("date");
-    return (new Comment(username, content, date));
+    return (new Comment(username, content, imageURL, date));
+  }
+
+  /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
+  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+
+    // User submitted form without selecting a file, so we can't get a URL. (dev server)
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    // Our form only contains a single file input, so get the first index.
+    BlobKey blobKey = blobKeys.get(0);
+
+    // User submitted form without selecting a file, so we can't get a URL. (live server)
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+
+    // Use ImagesService to get a URL that points to the uploaded file.
+    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+
+    // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
+    // path to the image, rather than the path returned by imagesService which contains a host.
+    try {
+      URL url = new URL(imagesService.getServingUrl(options));
+      return url.getPath();
+    } catch (MalformedURLException e) {
+      return imagesService.getServingUrl(options);
+    }
   }
 }
