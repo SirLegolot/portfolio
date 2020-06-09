@@ -31,15 +31,23 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/username")
 public class UsernameServlet extends HttpServlet {
 
-  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  protected DatastoreService datastore;
+  protected UserService userService;
 
+  public UsernameServlet() {
+    super();
+    datastore = DatastoreServiceFactory.getDatastoreService();
+    userService = UserServiceFactory.getUserService();
+  }
+  
+  // If user is logged in, provides a simple form to edit their user/nickname
+  // If not, provides a link to log in.
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
     out.println("<h1>Set Username</h1>");
 
-    UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       String username = getUsername(userService.getCurrentUser().getUserId());
       out.println("<p>Set your username here:</p>");
@@ -56,16 +64,16 @@ public class UsernameServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
+    // If not logged in, redirects user back to the form to login
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/username");
       return;
     }
 
+    // Getting username and user id to store in datastore
     String username = request.getParameter("username");
     String id = userService.getCurrentUser().getUserId();
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity entity = new Entity("UserInfo", id);
     entity.setProperty("id", id);
     entity.setProperty("username", username);
