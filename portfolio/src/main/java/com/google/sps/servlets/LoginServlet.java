@@ -29,7 +29,8 @@ public class LoginServlet extends HttpServlet {
 
   protected UserService userService;
   protected Gson gson;
-  private boolean loginStatus;
+  private boolean isLoggedIn;
+  private boolean isAdmin;
   private String userEmail;
   private String loginLogoutURL;
   private String username;
@@ -44,23 +45,23 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    
-
     // Retrieving account information.
     if (userService.isUserLoggedIn()) {
-      loginStatus = true;
+      isLoggedIn = true;
+      isAdmin = userService.isUserAdmin();
       userEmail = userService.getCurrentUser().getEmail();
       loginLogoutURL = userService.createLogoutURL("/forum.jsp");
       username = null; // TODO: implement username functionality
     } else {
-      loginStatus = false;
+      isLoggedIn = false;
+      isAdmin = false;
       userEmail = null;
       loginLogoutURL = userService.createLoginURL("/forum.jsp");
       username = null; 
     }
 
     // Convert Account object to json format.
-    account = new Account(loginStatus, userEmail, loginLogoutURL, username);
+    account = new Account(isLoggedIn, isAdmin, userEmail, loginLogoutURL, username);
     String json = gson.toJson(account);
 
     // Send the JSON as the response.

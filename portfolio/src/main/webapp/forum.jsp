@@ -78,12 +78,12 @@
         <!-- Comments container is an unordered list. -->
         <ul id="commentThread"></ul>
 
-        <button onclick="clearComments()">Clear Comments (Dev)</button>
+        <button onclick="clearComments()" id="deleteButton">Clear Comments (Dev)</button>
       </div>
     </div>
 
     <!-- Leave a Comment form. -->
-    <div class="card">
+    <div class="card" id="commentBox">
       <div class="card-header">Leave a Comment</div>
       <div class="card-text">
         <form action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">

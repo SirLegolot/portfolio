@@ -135,17 +135,36 @@ function refresh() {
   getLogin();
 }
 
+// Sets the greeting at the top of the page depending on whether user is 
+// logged in or not.
 function getLogin() {
   const loginInfo = document.getElementById('loginInfo');
   fetch('/login').then(response => response.json()).then(account => { 
+    // Default greeting prompts user to log in to comment.
     let greeting = "Hello stranger! Please log in to comment.";
     const loginLogoutURL = account.loginLogoutURL;
     let linkText = "Log In";
-    if (account.loginStatus) {
+
+    // If user is not logged in, commentBox does not show.
+    const commentBox = document.getElementById('commentBox');
+    commentBox.style.display = "none";
+
+    // If user is not an admin, the delete comments button is not shown.
+    const deleteButton = document.getElementById('deleteButton');
+    deleteButton.style.display = "none";
+
+    // If user is logged in, sets appropriate greeting and shows comment box.
+    if (account.isLoggedIn) {
       greeting = "Welcome, " + account.userEmail; 
       linkText = "Log Out";
+      commentBox.style.display = "block";
+      // If user is an admin, allow the user to delete all the comments
+      if (account.isAdmin) deleteButton.style.display = "block";
     }
+
+    // Display the user greeting.
     loginInfo.innerHTML = greeting + " <a class='login' href='" + 
                           loginLogoutURL + "'>" + linkText + "</a>";
+    
   });
 }
