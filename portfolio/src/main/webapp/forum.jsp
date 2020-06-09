@@ -78,7 +78,7 @@
         <!-- Comments container is an unordered list. -->
         <ul id="commentThread"></ul>
 
-        <button onclick="clearComments()" id="deleteButton">Clear Comments (Dev)</button>
+        <button onclick="clearComments()" id="deleteButton">Clear Comments (Admin)</button>
       </div>
     </div>
 
@@ -87,8 +87,6 @@
       <div class="card-header">Leave a Comment</div>
       <div class="card-text">
         <form action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
-          <label for="username">Username*</label><br/>
-          <input type="text" name="username" id="username" required><br/><br/>
           <label for="txtbox">Comment*</label><br/>
           <textarea rows="5" name="content" id="txtbox" required></textarea>
           <br/><br/>

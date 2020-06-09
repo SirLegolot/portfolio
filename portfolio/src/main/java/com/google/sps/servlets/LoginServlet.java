@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 public class LoginServlet extends HttpServlet {
 
   protected UserService userService;
+  protected DatastoreService datastore;
   protected Gson gson;
   private boolean isLoggedIn;
   private boolean isAdmin;
@@ -39,6 +41,7 @@ public class LoginServlet extends HttpServlet {
   public LoginServlet() {
     super();
     userService = UserServiceFactory.getUserService();
+    datastore = DatastoreServiceFactory.getDatastoreService();
     gson = new Gson();
   }
 
@@ -51,7 +54,7 @@ public class LoginServlet extends HttpServlet {
       isAdmin = userService.isUserAdmin();
       userEmail = userService.getCurrentUser().getEmail();
       loginLogoutURL = userService.createLogoutURL("/forum.jsp");
-      username = null; // TODO: implement username functionality
+      username = getUsername(userService.getCurrentUser().getUserId());
     } else {
       isLoggedIn = false;
       isAdmin = false;
@@ -68,4 +71,20 @@ public class LoginServlet extends HttpServlet {
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
+
+  /** Returns the username of the user with id, or null if the user has not set a username. */
+  private String getUsername(String id) {
+    Query query =
+        new Query("UserInfo")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return null;
+    }
+    String username = entity.getProperty("username").toString();
+    return username;
+  }
 }
+
+

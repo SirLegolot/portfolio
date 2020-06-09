@@ -46,6 +46,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 /** Servlet that returns comments stored in datastore.*/
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -56,6 +59,7 @@ public class DataServlet extends HttpServlet {
   protected Query queryDescending;
   protected BlobstoreService blobstoreService;
   protected ImagesService imagesService;
+  protected UserService userService;
 
   public DataServlet() {
     super();
@@ -65,6 +69,7 @@ public class DataServlet extends HttpServlet {
     gson = new Gson();
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     imagesService = ImagesServiceFactory.getImagesService();
+    userService = UserServiceFactory.getUserService();
   }
 
   @Override
@@ -113,7 +118,7 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Creates comment fields/metadata.
-    String username = request.getParameter("username");
+    String username = getUsername(userService.getCurrentUser().getUserId());
     String content = request.getParameter("content");
     Date date = new Date();
     long timestamp = System.currentTimeMillis();
@@ -180,5 +185,21 @@ public class DataServlet extends HttpServlet {
     } catch (MalformedURLException e) {
       return imagesService.getServingUrl(options);
     }
+  }
+
+   /**
+   * Returns the username of the user with id, or email if the user has not set a username.
+   */
+  private String getUsername(String id) {
+    Query query =
+        new Query("UserInfo")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return userService.getCurrentUser().getEmail();
+    }
+    String username = entity.getProperty("username").toString();
+    return username;
   }
 }
