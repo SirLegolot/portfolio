@@ -128,3 +128,24 @@ function createListElement(comment) {
 function clearComments() {
   fetch("/delete-data", {method: 'POST'}).then(() => getComments());
 }
+
+// Refresh page causes the comments and login status to refresh.
+function refresh() {
+  getComments();
+  getLogin();
+}
+
+function getLogin() {
+  const loginInfo = document.getElementById('loginInfo');
+  fetch('/login').then(response => response.json()).then(account => { 
+    let greeting = "Hello stranger! Please log in to comment.";
+    const loginLogoutURL = account.loginLogoutURL;
+    let linkText = "Log In";
+    if (account.loginStatus) {
+      greeting = "Welcome, " + account.userEmail; 
+      linkText = "Log Out";
+    }
+    loginInfo.innerHTML = greeting + " <a class='login' href='" + 
+                          loginLogoutURL + "'>" + linkText + "</a>";
+  });
+}

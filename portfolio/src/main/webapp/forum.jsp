@@ -17,7 +17,7 @@
   <script src="script.js"></script>
 </head>
 
-<body onload="getComments()">
+<body onload="refresh()">
   <!-- Navigation Bar -->
   <div class="navbar" id="mynavbar">
     <a href="index.html">Home</a>
@@ -41,6 +41,9 @@
 
   <!-- Blog cards -->
   <div id="content">
+
+    <!-- Login information -->
+    <div class="card"><div class="card-header" id="loginInfo"></div></div>
 
     <!-- Comment Section -->
     <div class="card">
