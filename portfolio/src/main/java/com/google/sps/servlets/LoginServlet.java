@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.Account;
 import com.google.gson.Gson;
 
+import com.google.sps.data.UserLibrary;
+
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
@@ -54,7 +56,9 @@ public class LoginServlet extends HttpServlet {
       isAdmin = userService.isUserAdmin();
       userEmail = userService.getCurrentUser().getEmail();
       loginLogoutURL = userService.createLogoutURL("/forum.jsp");
-      username = getUsername(userService.getCurrentUser().getUserId());
+      // Get the username if it exists, otherwise set to null.
+      String userId = userService.getCurrentUser().getUserId();
+      username = UserLibrary.getUsername(userId, datastore, null);
     } else {
       isLoggedIn = false;
       isAdmin = false;
@@ -70,20 +74,6 @@ public class LoginServlet extends HttpServlet {
     // Send the JSON as the response.
     response.setContentType("application/json;");
     response.getWriter().println(json);
-  }
-
-  /** Returns the username of the user with id, or null if the user has not set a username. */
-  private String getUsername(String id) {
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return null;
-    }
-    String username = entity.getProperty("username").toString();
-    return username;
   }
 }
 

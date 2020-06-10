@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import com.google.sps.data.Comment;
+import com.google.sps.data.UserLibrary;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -118,7 +119,10 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Creates comment fields/metadata.
-    String username = getUsername(userService.getCurrentUser().getUserId());
+    String userId = userService.getCurrentUser().getUserId();
+    String userEmail = userService.getCurrentUser().getEmail();
+    // Return the username if exists, otherwise use the email.
+    String username = UserLibrary.getUsername(userId, datastore, userEmail);
     String content = request.getParameter("content");
     Date date = new Date();
     long timestamp = System.currentTimeMillis();
@@ -185,21 +189,5 @@ public class DataServlet extends HttpServlet {
     } catch (MalformedURLException e) {
       return imagesService.getServingUrl(options);
     }
-  }
-
-   /**
-   * Returns the username of the user with id, or email if the user has not set a username.
-   */
-  private String getUsername(String id) {
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return userService.getCurrentUser().getEmail();
-    }
-    String username = entity.getProperty("username").toString();
-    return username;
   }
 }

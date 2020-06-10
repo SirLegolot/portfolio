@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.sps.data.UserLibrary;
+
 @WebServlet("/username")
 public class UsernameServlet extends HttpServlet {
 
@@ -49,7 +51,9 @@ public class UsernameServlet extends HttpServlet {
     out.println("<h1>Set Username</h1>");
 
     if (userService.isUserLoggedIn()) {
-      String username = getUsername(userService.getCurrentUser().getUserId());
+      // Get the username if it exists, otherwise return empty string.
+      String userId = userService.getCurrentUser().getUserId();
+      String username = UserLibrary.getUsername(userId, datastore, "");
       out.println("<p>Set your username here:</p>");
       out.println("<form method=\"POST\" action=\"/username\">");
       out.println("<input name=\"username\" value=\"" + username + "\" />");
@@ -81,21 +85,5 @@ public class UsernameServlet extends HttpServlet {
     datastore.put(entity);
 
     response.sendRedirect("/forum.jsp");
-  }
-
-  /**
-   * Returns the username of the user with id, or empty String if the user has not set a username.
-   */
-  private String getUsername(String id) {
-    Query query =
-        new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
-    PreparedQuery results = datastore.prepare(query);
-    Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return "";
-    }
-    String username = entity.getProperty("username").toString();
-    return username;
   }
 }
