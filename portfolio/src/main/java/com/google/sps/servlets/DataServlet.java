@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Date;
 import com.google.sps.data.Comment;
 import com.google.sps.data.UserLibrary;
+import com.google.sps.data.ImageLabel;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -136,9 +137,14 @@ public class DataServlet extends HttpServlet {
     String content = request.getParameter("content");
     Date date = new Date();
     long timestamp = System.currentTimeMillis();
+
     // Get the URL of the image that the user uploaded to Blobstore.
     BlobKey blobKey = getBlobKey(request, "imageURL");
     String imageURL = getUploadedFileUrl(blobKey);
+
+    // Get image labels.
+    // byte[] blobBytes = getBlobBytes(blobKey);
+    // List<ImageLabel> imageLabels = getImageLabels(blobBytes);
 
     // Creates Entity object.
     Entity commentEntity = new Entity("Comment");
@@ -174,7 +180,6 @@ public class DataServlet extends HttpServlet {
    * upload a file.
    */
   private BlobKey getBlobKey(HttpServletRequest request, String formInputElementName) {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
@@ -217,7 +222,6 @@ public class DataServlet extends HttpServlet {
    * BlobKey parameter.
    */
   private byte[] getBlobBytes(BlobKey blobKey) throws IOException {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
 
     int fetchSize = BlobstoreService.MAX_BLOB_FETCH_SIZE;
@@ -244,7 +248,7 @@ public class DataServlet extends HttpServlet {
    * Uses the Google Cloud Vision API to generate a list of labels that apply to the image
    * represented by the binary data stored in imgBytes.
    */
-  private List<EntityAnnotation> getImageLabels(byte[] imgBytes) throws IOException {
+  private List<ImageLabel> getImageLabels(byte[] imgBytes) throws IOException {
     ByteString byteString = ByteString.copyFrom(imgBytes);
     Image image = Image.newBuilder().setContent(byteString).build();
 
@@ -265,6 +269,15 @@ public class DataServlet extends HttpServlet {
       return null;
     }
 
-    return imageResponse.getLabelAnnotationsList();
+    return convertToImageLabels(imageResponse.getLabelAnnotationsList());
+  }
+
+  private List<ImageLabel> convertToImageLabels(List<EntityAnnotation> entityLabels) {
+    List<ImageLabel> imageLabels = new ArrayList<>(); 
+    for (EntityAnnotation label : entityLabels) {
+      ImageLabel newLabel = new ImageLabel(label.getDescription(), label.getScore());
+      imageLabels.add(newLabel);
+    }
+    return imageLabels;
   }
 }
