@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
 public class UserLibrary { 
+  // Returns the username of the user if it exists, otherwise returns the default value.
   public static String getUsername(String id, DatastoreService datastore, String defaultValue) {
     Query query =
         new Query("UserInfo")
