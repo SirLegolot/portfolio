@@ -237,3 +237,15 @@ div.gallery img {
 .reload:hover {
   color: #ff9800;
 }
+
+/* login button/link */
+.login {
+  display: block;
+  float: right;
+  text-decoration: none;
+  color: black;
+}
+
+.login:hover {
+  color: #ff9800;
+}

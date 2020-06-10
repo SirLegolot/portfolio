@@ -17,7 +17,7 @@
   <script src="script.js"></script>
 </head>
 
-<body onload="getComments()">
+<body onload="refresh()">
   <!-- Navigation Bar -->
   <div class="navbar" id="mynavbar">
     <a href="index.html">Home</a>
@@ -41,6 +41,9 @@
 
   <!-- Blog cards -->
   <div id="content">
+
+    <!-- Login information -->
+    <div class="card"><div class="card-header" id="loginInfo"></div></div>
 
     <!-- Comment Section -->
     <div class="card">
@@ -75,17 +78,15 @@
         <!-- Comments container is an unordered list. -->
         <ul id="commentThread"></ul>
 
-        <button onclick="clearComments()">Clear Comments (Dev)</button>
+        <button onclick="clearComments()" id="deleteButton">Clear Comments (Admin)</button>
       </div>
     </div>
 
     <!-- Leave a Comment form. -->
-    <div class="card">
+    <div class="card" id="commentBox">
       <div class="card-header">Leave a Comment</div>
       <div class="card-text">
         <form action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
-          <label for="username">Username*</label><br/>
-          <input type="text" name="username" id="username" required><br/><br/>
           <label for="txtbox">Comment*</label><br/>
           <textarea rows="5" name="content" id="txtbox" required></textarea>
           <br/><br/>

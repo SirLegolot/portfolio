@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import com.google.sps.data.Comment;
+import com.google.sps.data.UserLibrary;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -46,6 +47,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 /** Servlet that returns comments stored in datastore.*/
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -56,6 +60,7 @@ public class DataServlet extends HttpServlet {
   protected Query queryDescending;
   protected BlobstoreService blobstoreService;
   protected ImagesService imagesService;
+  protected UserService userService;
 
   public DataServlet() {
     super();
@@ -65,6 +70,7 @@ public class DataServlet extends HttpServlet {
     gson = new Gson();
     blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     imagesService = ImagesServiceFactory.getImagesService();
+    userService = UserServiceFactory.getUserService();
   }
 
   @Override
@@ -113,7 +119,10 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Creates comment fields/metadata.
-    String username = request.getParameter("username");
+    String userId = userService.getCurrentUser().getUserId();
+    String userEmail = userService.getCurrentUser().getEmail();
+    // Return the username if exists, otherwise use the email.
+    String username = UserLibrary.getUsername(userId, datastore, userEmail);
     String content = request.getParameter("content");
     Date date = new Date();
     long timestamp = System.currentTimeMillis();
