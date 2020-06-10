@@ -142,10 +142,13 @@ public class DataServlet extends HttpServlet {
     BlobKey blobKey = getBlobKey(request, "imageURL");
     String imageURL = getUploadedFileUrl(blobKey);
 
-    // Get image labels.
-    // byte[] blobBytes = getBlobBytes(blobKey);
-    // List<ImageLabel> imageLabels = getImageLabels(blobBytes);
-
+    // Get image labels, only if an image was uploaded by the user.
+    List<ImageLabel> imageLabels = null;
+    if (blobKey != null) {
+      byte[] blobBytes = getBlobBytes(blobKey);
+      imageLabels = getImageLabels(blobBytes);
+    }
+    
     // Creates Entity object.
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);
@@ -153,6 +156,7 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("date", date);
     commentEntity.setProperty("timestamp", timestamp);
     commentEntity.setProperty("imageURL", imageURL);
+    commentEntity.setProperty("imageLabels", imageLabels);
 
     // Connects to the datastore and inserts the entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
