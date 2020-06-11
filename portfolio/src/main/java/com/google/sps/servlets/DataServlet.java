@@ -61,6 +61,9 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 import java.io.ByteArrayOutputStream;
 
+import java.util.Random;
+import java.math.BigDecimal; 
+
 /** Servlet that returns comments stored in datastore.*/
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -143,10 +146,17 @@ public class DataServlet extends HttpServlet {
     String imageURL = getUploadedFileUrl(blobKey);
 
     // Get image labels, only if an image was uploaded by the user.
-    List<ImageLabel> imageLabels = null;
+    String imageLabels = null;
     if (blobKey != null) {
       byte[] blobBytes = getBlobBytes(blobKey);
-      imageLabels = getImageLabels(blobBytes);
+      // Looks like this is broken for now (permission errors and whatnot)
+      // in the development server. I can't test it in production either because
+      // imagesService is unavailable in the production environment due to 
+      // permission errors as well. 
+      // imageLabels = getImageLabels(blobBytes);
+
+      // Insead, I will supply my own fake labels for testing:
+      imageLabels = getDummyImageLabels(blobBytes);
     }
     
     // Creates Entity object.
@@ -172,11 +182,17 @@ public class DataServlet extends HttpServlet {
   private Comment createComment(Entity entity) {
     String username = entity.getProperty("username").toString();
     String content = entity.getProperty("content").toString();
-    Object imageURLObject = entity.getProperty("imageURL");
-    String imageURL = null;
-    if (imageURLObject != null) imageURL = imageURLObject.toString();
     Date date = (Date) entity.getProperty("date");
-    return (new Comment(username, content, imageURL, date));
+
+    // Image url and image labels could be null, so we have to check for this.
+    Object imageURLObject = entity.getProperty("imageURL");
+    Object imageLabelsObject = entity.getProperty("imageLabels");
+    String imageURL = null;
+    String imageLabels = null;
+    if (imageURLObject != null) imageURL = imageURLObject.toString();
+    if (imageLabelsObject != null) imageLabels = imageLabelsObject.toString();
+    
+    return (new Comment(username, content, imageURL, imageLabels, date));
   }
 
   /**
@@ -252,7 +268,7 @@ public class DataServlet extends HttpServlet {
    * Uses the Google Cloud Vision API to generate a list of labels that apply to the image
    * represented by the binary data stored in imgBytes.
    */
-  private List<ImageLabel> getImageLabels(byte[] imgBytes) throws IOException {
+  private String getImageLabels(byte[] imgBytes) throws IOException {
     ByteString byteString = ByteString.copyFrom(imgBytes);
     Image image = Image.newBuilder().setContent(byteString).build();
 
@@ -276,12 +292,37 @@ public class DataServlet extends HttpServlet {
     return convertToImageLabels(imageResponse.getLabelAnnotationsList());
   }
 
-  private List<ImageLabel> convertToImageLabels(List<EntityAnnotation> entityLabels) {
+  private String convertToImageLabels(List<EntityAnnotation> entityLabels) {
     List<ImageLabel> imageLabels = new ArrayList<>(); 
     for (EntityAnnotation label : entityLabels) {
       ImageLabel newLabel = new ImageLabel(label.getDescription(), label.getScore());
       imageLabels.add(newLabel);
     }
-    return imageLabels;
+    return gson.toJson(imageLabels);
+  }
+
+  private String getDummyImageLabels(byte[] imgBytes) {
+    List<ImageLabel> dummyImageLabels = new ArrayList<>();
+    // Will choose random descriptions from the following array.
+    String[] descriptions = {"Cat", "Dog", "Car", "Scyscraper", "Wagon", 
+                             "Woman", "Man", "Baby", "Octopus", "City", "Sky"};
+    // Choose random number of labels to insert in dummy label array, between
+    // 1 and 5.
+    Random rand = new Random();
+    int randomNum = rand.nextInt(5) + 1;
+    for (int i = 0; i<randomNum; i++) {
+      String randomDescription = descriptions[rand.nextInt(11)];
+      float randomScore = round(rand.nextFloat(), 2);
+      ImageLabel dummyLabel = new ImageLabel(randomDescription, randomScore);
+      dummyImageLabels.add(dummyLabel);
+    }
+    return gson.toJson(dummyImageLabels);
+  }
+
+  // Rounding a float to decimal place.
+  private float round(float d, int decimalPlace) {
+    BigDecimal bd = new BigDecimal(Float.toString(d));
+    bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+    return bd.floatValue();
   }
 }
