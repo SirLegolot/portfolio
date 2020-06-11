@@ -106,6 +106,7 @@ function createListElement(comment) {
   const uploaded = comment.imageURL != null;
   const imgUpload = document.createElement('img');
   const imgLink = document.createElement('a');
+  const imgLabels = document.createElement('ul');
   if (uploaded) {
     imgLink.setAttribute('href', comment.imageURL);
     imgLink.setAttribute('target', '_blank');
@@ -113,15 +114,30 @@ function createListElement(comment) {
     imgUpload.setAttribute('width', '300px');
     imgUpload.setAttribute('alt', 'Uploaded_image');
     imgLink.appendChild(imgUpload);
+    addImageLabels(comment, imgLabels);
   }
 
   // Adding all the components that make up a comment.
   li.appendChild(img);
   div.appendChild(header);
   div.appendChild(p);
-  if (uploaded) div.appendChild(imgLink);
+  if (uploaded) {
+    div.appendChild(imgLink);
+    div.appendChild(imgLabels);
+  }
   li.appendChild(div);
   return li;
+}
+
+// Adds labels as list elements at the end of a comment.
+function addImageLabels(comment, imgLabels) {
+  const labels = JSON.parse(comment.imageLabels);
+  for (i = 0; i < labels.length; i++) {
+    let label = labels[i];
+    let newLabel = document.createElement('li');
+    newLabel.innerText = label.description + ": " + label.score;
+    imgLabels.appendChild(newLabel);
+  }
 }
 
 // Deletes all comments from datastore and refreshes.
