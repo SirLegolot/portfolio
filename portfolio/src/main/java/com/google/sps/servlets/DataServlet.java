@@ -296,8 +296,7 @@ public class DataServlet extends HttpServlet {
   private String convertToImageLabels(List<EntityAnnotation> entityLabels) {
     List<ImageLabel> imageLabels = new ArrayList<>(); 
     for (EntityAnnotation label : entityLabels) {
-      ImageLabel newLabel = new ImageLabel(label.getDescription(), label.getScore());
-      imageLabels.add(newLabel);
+      imageLabels.add(new ImageLabel(label.getDescription(), label.getScore()));
     }
     return gson.toJson(imageLabels);
   }
@@ -305,7 +304,7 @@ public class DataServlet extends HttpServlet {
   private String getDummyImageLabels(byte[] imgBytes) {
     List<ImageLabel> dummyImageLabels = new ArrayList<>();
     // Will choose random descriptions from the following array.
-    String[] descriptions = {"Cat", "Dog", "Car", "Scyscraper", "Wagon", 
+    String[] descriptions = {"Cat", "Dog", "Car", "Skyscraper", "Wagon", 
                              "Woman", "Man", "Baby", "Octopus", "City", "Sky"};
     // Choose random number of labels to insert in dummy label array, between
     // 1 and 5.
@@ -314,8 +313,7 @@ public class DataServlet extends HttpServlet {
     for (int i = 0; i<randomNum; i++) {
       String randomDescription = descriptions[rand.nextInt(11)];
       float randomScore = round(rand.nextFloat(), 2);
-      ImageLabel dummyLabel = new ImageLabel(randomDescription, randomScore);
-      dummyImageLabels.add(dummyLabel);
+      dummyImageLabels.add(new ImageLabel(randomDescription, randomScore));
     }
     return gson.toJson(dummyImageLabels);
   }
