@@ -292,6 +292,7 @@ public class DataServlet extends HttpServlet {
     return convertToImageLabels(imageResponse.getLabelAnnotationsList());
   }
 
+  // Converts labels to a json format that is good for storage and sending.
   private String convertToImageLabels(List<EntityAnnotation> entityLabels) {
     List<ImageLabel> imageLabels = new ArrayList<>(); 
     for (EntityAnnotation label : entityLabels) {

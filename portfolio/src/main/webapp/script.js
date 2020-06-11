@@ -129,6 +129,7 @@ function createListElement(comment) {
   return li;
 }
 
+// Adds labels as list elements at the end of a comment.
 function addImageLabels(comment, imgLabels) {
   const labels = JSON.parse(comment.imageLabels);
   for (i = 0; i < labels.length; i++) {
