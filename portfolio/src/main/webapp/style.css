@@ -231,7 +231,6 @@ div.gallery img {
   font-family: Lucida Sans Unicode;
   text-decoration: none;
   color: black;
-  font-size: 25x;
 }
 
 .reload:hover {
@@ -248,4 +247,10 @@ div.gallery img {
 
 .login:hover {
   color: #ff9800;
+}
+
+/* Image labels */
+.imageLabels {
+  color: #777;
+  font-size: 14px;
 }

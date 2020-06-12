@@ -153,10 +153,10 @@ public class DataServlet extends HttpServlet {
       // in the development server. I can't test it in production either because
       // imagesService is unavailable in the production environment due to 
       // permission errors as well. 
-      // imageLabels = getImageLabels(blobBytes);
+      imageLabels = getImageLabels(blobBytes);
 
       // Insead, I will supply my own fake labels for testing:
-      imageLabels = getDummyImageLabels(blobBytes);
+      // imageLabels = getDummyImageLabels(blobBytes);
     }
     
     // Creates Entity object.
@@ -225,15 +225,20 @@ public class DataServlet extends HttpServlet {
   private String getUploadedFileUrl(BlobKey blobKey) {
     // In the case that the user did not upload any image, return null.
     if (blobKey == null) return null;
-    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-
-    // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
-    // path to the image, rather than the path returned by imagesService which contains a host.
+    // Attempt to use imagesService API, otherwise serve blob directly through
+    // a servlet.
     try {
-      URL url = new URL(imagesService.getServingUrl(options));
-      return url.getPath();
-    } catch (MalformedURLException e) {
-      return imagesService.getServingUrl(options);
+      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+      // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
+      // path to the image, rather than the path returned by imagesService which contains a host.
+      try {
+        URL url = new URL(imagesService.getServingUrl(options));
+        return url.getPath();
+      } catch (MalformedURLException e) {
+        return imagesService.getServingUrl(options);
+      }
+    } catch (Exception e) {
+      return "/serveBlobstoreImage?blobKey=" + blobKey.getKeyString();
     }
   }
 
@@ -296,7 +301,7 @@ public class DataServlet extends HttpServlet {
   private String convertToImageLabels(List<EntityAnnotation> entityLabels) {
     List<ImageLabel> imageLabels = new ArrayList<>(); 
     for (EntityAnnotation label : entityLabels) {
-      imageLabels.add(new ImageLabel(label.getDescription(), label.getScore()));
+      imageLabels.add(new ImageLabel(label.getDescription(), round(label.getScore(), 2)));
     }
     return gson.toJson(imageLabels);
   }
