@@ -153,10 +153,10 @@ public class DataServlet extends HttpServlet {
       // in the development server. I can't test it in production either because
       // imagesService is unavailable in the production environment due to 
       // permission errors as well. 
-      imageLabels = getImageLabels(blobBytes);
+      // imageLabels = getImageLabels(blobBytes);
 
       // Insead, I will supply my own fake labels for testing:
-      // imageLabels = getDummyImageLabels(blobBytes);
+      imageLabels = getDummyImageLabels(blobBytes);
     }
     
     // Creates Entity object.
