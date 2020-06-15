@@ -23,15 +23,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class FindMeetingQuery {
+  // Simply checks if optional attendees can go, otherwise considers only the 
+  // required attendees.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    long requestDuration = request.getDuration();
+    Collection<String> requiredAttendees = request.getAttendees();
+    // All attendees contains both required and optional attendies.
+    Collection<String> allAttendees = new HashSet<>();
+    allAttendees.addAll(requiredAttendees);
+    allAttendees.addAll(request.getOptionalAttendees());
+    Collection<TimeRange> queryWithOptionalAttendees = queryHelper(events, allAttendees, requestDuration);
+    if (queryWithOptionalAttendees.isEmpty() && !requiredAttendees.isEmpty()) {
+      return queryHelper(events, requiredAttendees, requestDuration);
+    }
+    return queryWithOptionalAttendees;
+  }
 
+  public Collection<TimeRange> queryHelper(Collection<Event> events, Collection<String> requiredAttendees, long requestDuration) {
     // Setting up arrays first.
     List<TimeRange> busyTimes = new ArrayList<>();
     List<TimeRange> mergedBusyTimes = new ArrayList<>();
     List<TimeRange> validTimes = new ArrayList<>();
 
     // Only get the TimeRanges where required attendees are busy.
-    Collection<String> requiredAttendees = request.getAttendees();
     for (Event event : events) {
       if (eventContainsRequiredAttendees(event, requiredAttendees)) {
         busyTimes.add(event.getWhen());
@@ -45,7 +59,7 @@ public final class FindMeetingQuery {
     // list sequentially. Using array list as a stack because I'll need it as
     // an array list right after.
     if (busyTimes.isEmpty()) {
-      if (TimeRange.WHOLE_DAY.duration() >= request.getDuration()) {
+      if (TimeRange.WHOLE_DAY.duration() >= requestDuration) {
         validTimes.add(TimeRange.WHOLE_DAY);
       }
       return validTimes;
@@ -84,7 +98,7 @@ public final class FindMeetingQuery {
     validTimes.add(TimeRange.fromStartEnd(lastStart, TimeRange.END_OF_DAY, true));
 
     // Remove all intervals that are smaller than the request duration.
-    validTimes.removeIf(time -> time.duration() < request.getDuration());
+    validTimes.removeIf(time -> time.duration() < requestDuration);
     return validTimes;
   }
 
