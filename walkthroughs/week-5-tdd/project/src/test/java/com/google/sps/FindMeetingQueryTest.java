@@ -338,6 +338,8 @@ public final class FindMeetingQueryTest {
   @Test
   public void optionalAttendeePreventsMeeting() {
     // The optional attendee cannot go, otherwise there is no time for the meeting.
+    // This is because adding the optional attendies events, the available free time
+    // is smaller than the duration of the required meeting.
     //
     // Events  : |--A--|     |----A----|
     //                 |-B-|

@@ -28,10 +28,12 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long requestDuration = request.getDuration();
     Collection<String> requiredAttendees = request.getAttendees();
+
     // All attendees contains both required and optional attendies.
     Collection<String> allAttendees = new HashSet<>();
     allAttendees.addAll(requiredAttendees);
     allAttendees.addAll(request.getOptionalAttendees());
+
     Collection<TimeRange> queryWithOptionalAttendees = queryHelper(events, allAttendees, requestDuration);
     if (queryWithOptionalAttendees.isEmpty() && !requiredAttendees.isEmpty()) {
       return queryHelper(events, requiredAttendees, requestDuration);
@@ -39,12 +41,12 @@ public final class FindMeetingQuery {
     return queryWithOptionalAttendees;
   }
 
+  // This helper function returns the available times for a meeting given the attendees
+  // and duration of the meeting. All attendees passed in to the function are assumed as 
+  // required to attend. 
   public Collection<TimeRange> queryHelper(Collection<Event> events, Collection<String> requiredAttendees, long requestDuration) {
-    // Setting up arrays first.
     List<TimeRange> busyTimes = new ArrayList<>();
-    List<TimeRange> mergedBusyTimes = new ArrayList<>();
-    List<TimeRange> validTimes = new ArrayList<>();
-
+    
     // Only get the TimeRanges where required attendees are busy.
     for (Event event : events) {
       if (eventContainsRequiredAttendees(event, requiredAttendees)) {
@@ -52,21 +54,38 @@ public final class FindMeetingQuery {
       }
     }
 
-    // Sort the busyTimes list by end time.
+    // Sort the busyTimes list by start time.
     Collections.sort(busyTimes, TimeRange.ORDER_BY_START);
 
-    // Create a stack for merging all the busy times together, traversing the 
-    // list sequentially. Using array list as a stack because I'll need it as
-    // an array list right after.
+    // If there are no busy times, the whole day is free.
     if (busyTimes.isEmpty()) {
       if (TimeRange.WHOLE_DAY.duration() >= requestDuration) {
-        validTimes.add(TimeRange.WHOLE_DAY);
+        return Arrays.asList(TimeRange.WHOLE_DAY);
       }
-      return validTimes;
+      return Arrays.asList();
     }
+
+    // Merge the overlapping busy times together.
+    List<TimeRange> mergedBusyTimes = mergeBusyTimes(busyTimes);
+    
+    // From the busy times, get all the valid available times for the meeting.
+    return getValidTimes(mergedBusyTimes, requestDuration);
+  }
+
+  private boolean eventContainsRequiredAttendees(Event event, Collection<String> requiredAttendees) {
+    return !Collections.disjoint(event.getAttendees(), requiredAttendees);
+  }
+
+  // Given a list of busy times sorted by start date, merge overlapping intervals
+  // together. This method uses a stack to merge the times together sequentially.
+  // Using array list as a stack because I'll need it as an array list right after.
+  // We are also ensured that busyTimes is not empty, because it is checked right 
+  // before in the queryHelper main code.
+  private List<TimeRange> mergeBusyTimes(List<TimeRange> busyTimes) {
+    List<TimeRange> mergedBusyTimes = new ArrayList<>();
     mergedBusyTimes.add(busyTimes.get(0));
     for (int i = 1; i < busyTimes.size(); i++) {
-      TimeRange top = mergedBusyTimes.get(mergedBusyTimes.size()-1);
+      TimeRange top = mergedBusyTimes.get(mergedBusyTimes.size()-1); // top of stack
       TimeRange cur = busyTimes.get(i); 
       // If the time interval overlaps, merge the intervals together.
       if (top.overlaps(cur)) {
@@ -80,10 +99,14 @@ public final class FindMeetingQuery {
         mergedBusyTimes.add(cur);
       }
     }
+    return mergedBusyTimes;
+  }
 
-    // From the merged times, getting all the free times that have a valid duration
-    // for the meeting. Also adding slots from the beginning of the day to the
-    // first event and from the last event to the end of the day.
+  // From the merged times, get all the free times that have a valid duration
+  // for the meeting. Also add slots from the beginning of the day to the
+  // first event and from the last event to the end of the day.
+  private Collection<TimeRange> getValidTimes(List<TimeRange> mergedBusyTimes, long requestDuration) {
+    List<TimeRange> validTimes = new ArrayList<>();
     int firstDuration = mergedBusyTimes.get(0).start() - TimeRange.START_OF_DAY;
     validTimes.add(TimeRange.fromStartDuration(TimeRange.START_OF_DAY, firstDuration));
     // Creating slots for all times between consecutive merged events.
@@ -100,9 +123,5 @@ public final class FindMeetingQuery {
     // Remove all intervals that are smaller than the request duration.
     validTimes.removeIf(time -> time.duration() < requestDuration);
     return validTimes;
-  }
-
-  private boolean eventContainsRequiredAttendees(Event event, Collection<String> requiredAttendees) {
-    return !Collections.disjoint(event.getAttendees(), requiredAttendees);
   }
 }

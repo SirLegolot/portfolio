@@ -301,6 +301,8 @@ public class DataServlet extends HttpServlet {
   private String convertToImageLabels(List<EntityAnnotation> entityLabels) {
     List<ImageLabel> imageLabels = new ArrayList<>(); 
     for (EntityAnnotation label : entityLabels) {
+      // Add label and round score to 2 decimal places for better viewing 
+      // purposes when displayed on the website.
       imageLabels.add(new ImageLabel(label.getDescription(), round(label.getScore(), 2)));
     }
     return gson.toJson(imageLabels);
