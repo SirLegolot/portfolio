@@ -225,15 +225,20 @@ public class DataServlet extends HttpServlet {
   private String getUploadedFileUrl(BlobKey blobKey) {
     // In the case that the user did not upload any image, return null.
     if (blobKey == null) return null;
-    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-
-    // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
-    // path to the image, rather than the path returned by imagesService which contains a host.
+    // Attempt to use imagesService API, otherwise serve blob directly through
+    // a servlet.
     try {
-      URL url = new URL(imagesService.getServingUrl(options));
-      return url.getPath();
-    } catch (MalformedURLException e) {
-      return imagesService.getServingUrl(options);
+      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+      // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
+      // path to the image, rather than the path returned by imagesService which contains a host.
+      try {
+        URL url = new URL(imagesService.getServingUrl(options));
+        return url.getPath();
+      } catch (MalformedURLException e) {
+        return imagesService.getServingUrl(options);
+      }
+    } catch (Exception e) {
+      return "/serveBlobstoreImage?blobKey=" + blobKey.getKeyString();
     }
   }
 
@@ -296,8 +301,9 @@ public class DataServlet extends HttpServlet {
   private String convertToImageLabels(List<EntityAnnotation> entityLabels) {
     List<ImageLabel> imageLabels = new ArrayList<>(); 
     for (EntityAnnotation label : entityLabels) {
-      ImageLabel newLabel = new ImageLabel(label.getDescription(), label.getScore());
-      imageLabels.add(newLabel);
+      // Add label and round score to 2 decimal places for better viewing 
+      // purposes when displayed on the website.
+      imageLabels.add(new ImageLabel(label.getDescription(), round(label.getScore(), 2)));
     }
     return gson.toJson(imageLabels);
   }
@@ -305,7 +311,7 @@ public class DataServlet extends HttpServlet {
   private String getDummyImageLabels(byte[] imgBytes) {
     List<ImageLabel> dummyImageLabels = new ArrayList<>();
     // Will choose random descriptions from the following array.
-    String[] descriptions = {"Cat", "Dog", "Car", "Scyscraper", "Wagon", 
+    String[] descriptions = {"Cat", "Dog", "Car", "Skyscraper", "Wagon", 
                              "Woman", "Man", "Baby", "Octopus", "City", "Sky"};
     // Choose random number of labels to insert in dummy label array, between
     // 1 and 5.
@@ -314,8 +320,7 @@ public class DataServlet extends HttpServlet {
     for (int i = 0; i<randomNum; i++) {
       String randomDescription = descriptions[rand.nextInt(11)];
       float randomScore = round(rand.nextFloat(), 2);
-      ImageLabel dummyLabel = new ImageLabel(randomDescription, randomScore);
-      dummyImageLabels.add(dummyLabel);
+      dummyImageLabels.add(new ImageLabel(randomDescription, randomScore));
     }
     return gson.toJson(dummyImageLabels);
   }

@@ -106,7 +106,14 @@ function createListElement(comment) {
   const uploaded = comment.imageURL != null;
   const imgUpload = document.createElement('img');
   const imgLink = document.createElement('a');
+  const imgLabelsBox = document.createElement('div');
+  imgLabelsBox.setAttribute('class', 'imageLabels');
+  const imgLabelTitle = document.createElement('label');
+  imgLabelTitle.innerText = "Cloud Vision generated labels with confidence level:"
+  imgLabelTitle.setAttribute('for', 'imageLabelsList');
+  imgLabelsBox.appendChild(imgLabelTitle);
   const imgLabels = document.createElement('ul');
+  imgLabels.setAttribute('id', 'imageLabelsList');
   if (uploaded) {
     imgLink.setAttribute('href', comment.imageURL);
     imgLink.setAttribute('target', '_blank');
@@ -115,6 +122,7 @@ function createListElement(comment) {
     imgUpload.setAttribute('alt', 'Uploaded_image');
     imgLink.appendChild(imgUpload);
     addImageLabels(comment, imgLabels);
+    imgLabelsBox.appendChild(imgLabels);
   }
 
   // Adding all the components that make up a comment.
@@ -123,7 +131,7 @@ function createListElement(comment) {
   div.appendChild(p);
   if (uploaded) {
     div.appendChild(imgLink);
-    div.appendChild(imgLabels);
+    div.appendChild(imgLabelsBox);
   }
   li.appendChild(div);
   return li;
