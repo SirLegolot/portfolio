@@ -199,3 +199,98 @@ function getLogin() {
                           settingsLink;
   });
 }
+
+function getVision() {
+  fetch("/cloudVision").then(response => response.json()).then(annotation => {
+    const cloudVisionBox = document.getElementById('cloudVisionBox');
+    if (annotation == null) {
+      cloudVisionBox.innerText = "No image uploaded yet.";
+      return;
+    }
+    const genericLabels = annotation.genericLabels;
+    const webLabels = annotation.webLabels;
+    const webBestLabels = annotation.webBestLabels;
+    const textInImage = annotation.textInImage;
+    const dominantColors = annotation.dominantColors;
+    const objectsInImage = annotation.objectsInImage;
+    const logosInImage = annotation.logosInImage;
+
+    const label0 = "Image that was uploaded:";
+    const label1 = "Generic Labels:";
+    const label2 = "Labels based on similar images from the web:";
+    const label3 = "Best guess label:";
+    const label4 = "OCR/Text character recognition:";
+    const label5 = "Dominant colors (fraction r g b):";
+    const label6 = "Object detection:";
+    const label7 = "Logos:";
+    const p0 = document.createElement('p');
+    const p1 = document.createElement('p');
+    const p2 = document.createElement('p');
+    const p3 = document.createElement('p');
+    const p4 = document.createElement('p');
+    const p5 = document.createElement('p');
+    const p6 = document.createElement('p');
+    const p7 = document.createElement('p');
+    p0.innerText = label0;
+    p1.innerText = label1;
+    p2.innerText = label2;
+    p3.innerText = label3;
+    p4.innerText = label4;
+    p5.innerText = label5;
+    p6.innerText = label6;
+    p7.innerText = label7;
+
+    const image = document.createElement('img');
+    image.src = annotation.imageURL;
+    image.width = 300;
+    image.alt = "uploaded_image";
+    const list1 = document.createElement('ul');
+    const list2 = document.createElement('ul');
+    const list3 = document.createElement('ul');
+    const list4 = document.createElement('ul');
+    const list5 = document.createElement('ul');
+    const list6 = document.createElement('ul');
+    const list7 = document.createElement('ul');
+
+    addLabelsWithScore(genericLabels, list1);
+    addLabelsWithScore(webLabels, list2);
+    addLabels(webBestLabels, list3);
+    addLabels(textInImage, list4);
+    addLabels(dominantColors, list5);
+    addLabelsWithScore(objectsInImage, list6);
+    addLabelsWithScore(logosInImage, list7);
+    
+    cloudVisionBox.appendChild(p0);
+    cloudVisionBox.appendChild(image);
+    cloudVisionBox.appendChild(p1);
+    cloudVisionBox.appendChild(list1);
+    cloudVisionBox.appendChild(p2);
+    cloudVisionBox.appendChild(list2);
+    cloudVisionBox.appendChild(p3);
+    cloudVisionBox.appendChild(list3);
+    cloudVisionBox.appendChild(p4);
+    cloudVisionBox.appendChild(list4);
+    cloudVisionBox.appendChild(p5);
+    cloudVisionBox.appendChild(list5);
+    cloudVisionBox.appendChild(p6);
+    cloudVisionBox.appendChild(list6);
+    cloudVisionBox.appendChild(p7);
+    cloudVisionBox.appendChild(list7);
+  });
+}
+
+function addLabelsWithScore(labels, ul) {
+  labels.forEach(label => {
+    const newLabel = document.createElement('li');
+    newLabel.innerText = label.description + ": " + label.score;
+    ul.appendChild(newLabel);
+  });
+}
+
+function addLabels(labels, ul) {
+  labels.forEach(label => {
+    const newLabel = document.createElement('li');
+    newLabel.innerText = label;
+    ul.appendChild(newLabel);
+  })
+}
