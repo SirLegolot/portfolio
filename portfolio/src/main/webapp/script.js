@@ -220,7 +220,7 @@ function getVision() {
     const label2 = "Labels based on similar images from the web:";
     const label3 = "Best guess label:";
     const label4 = "OCR/Text character recognition:";
-    const label5 = "Dominant colors (fraction r g b):";
+    const label5 = "Dominant colors:";
     const label6 = "Object detection:";
     const label7 = "Logos:";
     const p0 = document.createElement('p');
@@ -256,7 +256,7 @@ function getVision() {
     addLabelsWithScore(webLabels, list2);
     addLabels(webBestLabels, list3);
     addLabels(textInImage, list4);
-    addLabels(dominantColors, list5);
+    addLabelsWithScore(dominantColors, list5);
     addLabelsWithScore(objectsInImage, list6);
     addLabelsWithScore(logosInImage, list7);
     

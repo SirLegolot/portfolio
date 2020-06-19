@@ -7,7 +7,7 @@ public class CloudVisionAnnotation {
   private List<ImageLabel> webLabels;
   private List<String> webBestLabels;
   private List<String> textInImage;
-  private List<String> dominantColors;
+  private List<ImageLabel> dominantColors;
   private List<ImageLabel> objectsInImage;
   private List<ImageLabel> logosInImage;
 
@@ -17,7 +17,7 @@ public class CloudVisionAnnotation {
                                List<ImageLabel> webLabels,
                                List<String> webBestLabels,
                                List<String> textInImage,
-                               List<String> dominantColors,
+                               List<ImageLabel> dominantColors,
                                List<ImageLabel> objectsInImage,
                                List<ImageLabel> logosInImage) {
     this.imageURL = imageURL;

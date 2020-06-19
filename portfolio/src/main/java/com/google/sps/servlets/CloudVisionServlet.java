@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Date;
+import java.awt.Color;
 import com.google.sps.data.Comment;
 import com.google.sps.data.UserLibrary;
 import com.google.sps.data.ImageLabel;
@@ -173,13 +174,18 @@ public class CloudVisionServlet extends HttpServlet {
       textInImage.add(textBlock.getDescription());
     }
 
-    List<String> dominantColors = new ArrayList<>();
+    List<ImageLabel> dominantColors = new ArrayList<>();
     for (ColorInfo color : colorAnnotations) {
-      dominantColors.add(String.format("fraction: %f%nr: %f, g: %f, b: %f%n",
-            color.getPixelFraction(),
-            color.getColor().getRed(),
-            color.getColor().getGreen(),
-            color.getColor().getBlue()));
+      String nearestColor = getNearestColor(convertToJavaColor(color.getColor()));
+      // Color javaColor = new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue());
+      // Color javaColor = convertToJavaColor(color.getColor());
+      // String nearestColor = "hello there!";
+      dominantColors.add(new ImageLabel(nearestColor, color.getPixelFraction()));
+      // String rgbString = String.format("r: %d, g: %d, b: %d",
+      //                                  Math.round(color.getColor().getRed()),
+      //                                  Math.round(color.getColor().getGreen()),
+      //                                  Math.round(color.getColor().getBlue()));
+      // dominantColors.add(new ImageLabel(rgbString, color.getPixelFraction()));
     }
 
     List<ImageLabel> objectsInImage = new ArrayList<>();
@@ -276,5 +282,56 @@ public class CloudVisionServlet extends HttpServlet {
 
     return outputBytes.toByteArray();
   }
+  
+  private String getNearestColor(Color color) {
+    Color[] constantColors = new Color[] { Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.lightGray, Color.magenta, Color.orange, Color.pink, Color.red, Color.white, Color.yellow };
+    Color nearestColor = null;
+    Integer nearestDistance = new Integer(Integer.MAX_VALUE);
 
+    for (Color constantColor : constantColors) {
+      int newDistance = colorDistance(constantColor, color);
+      if (newDistance < nearestDistance) {
+        nearestColor = constantColor;
+        nearestDistance = newDistance;
+      }
+    }
+
+    return getNearestColorString(nearestColor);
+    // return nearestColor.toString();
+  }
+
+  // https://stackoverflow.com/questions/6334311/whats-the-best-way-to-round-a-color-object-to-the-nearest-color-constant
+  // This link explaines the reasoning behind the magic numbers present in this function.
+  // the main idea is that the closest color visually is not necessarily the closest
+  // color in terms of a strict euclidean distance.
+  private int colorDistance(Color c1, Color c2) {
+    int red1 = c1.getRed();
+    int red2 = c2.getRed();
+    int rmean = (red1 + red2) >> 1;
+    int r = red1 - red2;
+    int g = c1.getGreen() - c2.getGreen();
+    int b = c1.getBlue() - c2.getBlue();
+    return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+  }  
+
+  private Color convertToJavaColor(com.google.type.Color color) {
+    return new Color(Math.round(color.getRed()), Math.round(color.getGreen()), Math.round(color.getBlue()));
+  }
+
+  private String getNearestColorString(Color color) {
+    if (color.equals(Color.black)) return "black";
+    else if (color.equals(Color.blue)) return "blue";
+    else if (color.equals(Color.cyan)) return "cyan";
+    else if (color.equals(Color.darkGray)) return "dark gray";
+    else if (color.equals(Color.gray)) return "gray";
+    else if (color.equals(Color.green)) return "green";
+    else if (color.equals(Color.lightGray)) return "light gray";
+    else if (color.equals(Color.magenta)) return "magenta";
+    else if (color.equals(Color.orange)) return "orange";
+    else if (color.equals(Color.pink)) return "pink";
+    else if (color.equals(Color.red)) return "red";
+    else if (color.equals(Color.white)) return "white";
+    else if (color.equals(Color.yellow)) return "yellow";
+    else return "";
+  }
 }
