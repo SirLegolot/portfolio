@@ -3,6 +3,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Date;
 import java.awt.Color;
 import com.google.sps.data.Comment;
@@ -91,13 +93,6 @@ public class CloudVisionServlet extends HttpServlet {
     // that the client uploaded an image.
     byte[] blobBytes = getBlobBytes(blobKey);
     AnnotateImageResponse imageResponse;
-    // try {
-      
-    // } catch (Exception e) {
-    //   jsonResponse = null;
-    //   response.sendRedirect("/blogs/vision.jsp");
-    //   return;
-    // }
 
     imageResponse = handleCloudVisionRequest(blobBytes);
     // Store the response and refresh the page
@@ -177,15 +172,7 @@ public class CloudVisionServlet extends HttpServlet {
     List<ImageLabel> dominantColors = new ArrayList<>();
     for (ColorInfo color : colorAnnotations) {
       String nearestColor = getNearestColor(convertToJavaColor(color.getColor()));
-      // Color javaColor = new Color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue());
-      // Color javaColor = convertToJavaColor(color.getColor());
-      // String nearestColor = "hello there!";
       dominantColors.add(new ImageLabel(nearestColor, color.getPixelFraction()));
-      // String rgbString = String.format("r: %d, g: %d, b: %d",
-      //                                  Math.round(color.getColor().getRed()),
-      //                                  Math.round(color.getColor().getGreen()),
-      //                                  Math.round(color.getColor().getBlue()));
-      // dominantColors.add(new ImageLabel(rgbString, color.getPixelFraction()));
     }
 
     List<ImageLabel> objectsInImage = new ArrayList<>();
@@ -200,13 +187,27 @@ public class CloudVisionServlet extends HttpServlet {
 
     String imageURL = getUploadedFileUrl(blobKey);
     return gson.toJson(new CloudVisionAnnotation(imageURL,
-                                                 genericLabels,
-                                                 webLabels,
+                                                 cleanUpLabels(genericLabels),
+                                                 cleanUpLabels(webLabels),
                                                  webBestLabels,
                                                  textInImage,
-                                                 dominantColors,
-                                                 objectsInImage, 
-                                                 logosInImage));
+                                                 cleanUpLabels(dominantColors),
+                                                 cleanUpLabels(objectsInImage), 
+                                                 cleanUpLabels(logosInImage)));
+  }
+
+  // This cleans up a imageLabel list by removing duplicates and blank labels.
+  private List<ImageLabel> cleanUpLabels(List<ImageLabel> labels) {
+    List<ImageLabel> cleanedList = new ArrayList<>();
+    Set<String> seen = new HashSet<>();
+    for (ImageLabel label : labels) {
+      String description = label.getDescription();
+      if (seen.contains(description)) continue;
+      if (description.isEmpty()) continue;
+      cleanedList.add(label);
+      seen.add(description);
+    }
+    return cleanedList;
   }
 
   /**
@@ -284,7 +285,7 @@ public class CloudVisionServlet extends HttpServlet {
   }
   
   private String getNearestColor(Color color) {
-    Color[] constantColors = new Color[] { Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.lightGray, Color.magenta, Color.orange, Color.pink, Color.red, Color.white, Color.yellow };
+    Color[] constantColors = new Color[] { Color.black, Color.blue, Color.cyan, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.white, Color.yellow };
     Color nearestColor = null;
     Integer nearestDistance = new Integer(Integer.MAX_VALUE);
 
@@ -305,13 +306,17 @@ public class CloudVisionServlet extends HttpServlet {
   // the main idea is that the closest color visually is not necessarily the closest
   // color in terms of a strict euclidean distance.
   private int colorDistance(Color c1, Color c2) {
-    int red1 = c1.getRed();
-    int red2 = c2.getRed();
-    int rmean = (red1 + red2) >> 1;
-    int r = red1 - red2;
+    // int red1 = c1.getRed();
+    // int red2 = c2.getRed();
+    // int rmean = (red1 + red2) >> 1;
+    // int r = red1 - red2;
+    // int g = c1.getGreen() - c2.getGreen();
+    // int b = c1.getBlue() - c2.getBlue();
+    // return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+    int r = c1.getRed() - c2.getRed();
     int g = c1.getGreen() - c2.getGreen();
     int b = c1.getBlue() - c2.getBlue();
-    return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+    return r*r + g*g + b*b;
   }  
 
   private Color convertToJavaColor(com.google.type.Color color) {
@@ -322,10 +327,8 @@ public class CloudVisionServlet extends HttpServlet {
     if (color.equals(Color.black)) return "black";
     else if (color.equals(Color.blue)) return "blue";
     else if (color.equals(Color.cyan)) return "cyan";
-    else if (color.equals(Color.darkGray)) return "dark gray";
     else if (color.equals(Color.gray)) return "gray";
     else if (color.equals(Color.green)) return "green";
-    else if (color.equals(Color.lightGray)) return "light gray";
     else if (color.equals(Color.magenta)) return "magenta";
     else if (color.equals(Color.orange)) return "orange";
     else if (color.equals(Color.pink)) return "pink";

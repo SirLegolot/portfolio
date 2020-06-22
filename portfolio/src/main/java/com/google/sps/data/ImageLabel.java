@@ -8,4 +8,13 @@ public class ImageLabel {
     this.description = description;
     this.score = score;
   }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public float getScore() {
+    return score;
+  }
+
 }
